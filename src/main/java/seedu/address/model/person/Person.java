@@ -6,27 +6,27 @@ import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.UniqueTagList;
 
 /**
- * Represents a Person in the address book.
+ * Represents an Activity in WhatsLeft.
  * Guarantees: details are present and not null, field values are validated.
  */
 public class Person implements ReadOnlyPerson {
 
-    private Name name;
+    private Description description;
     private Phone phone;
     private Email email;
-    private Address address;
+    private Location location;
 
     private UniqueTagList tags;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, UniqueTagList tags) {
-        assert !CollectionUtil.isAnyNull(name, phone, email, address, tags);
-        this.name = name;
+    public Person(Description description, Phone phone, Email email, Location location, UniqueTagList tags) {
+        assert !CollectionUtil.isAnyNull(description, phone, email, location, tags);
+        this.description = description;
         this.phone = phone;
         this.email = email;
-        this.address = address;
+        this.location = location;
         this.tags = new UniqueTagList(tags); // protect internal tags from changes in the arg list
     }
 
@@ -34,17 +34,17 @@ public class Person implements ReadOnlyPerson {
      * Creates a copy of the given ReadOnlyPerson.
      */
     public Person(ReadOnlyPerson source) {
-        this(source.getName(), source.getPhone(), source.getEmail(), source.getAddress(), source.getTags());
+        this(source.getDescription(), source.getPhone(), source.getEmail(), source.getLocation(), source.getTags());
     }
 
-    public void setName(Name name) {
-        assert name != null;
-        this.name = name;
+    public void setDescription(Description description) {
+        assert description != null;
+        this.description = description;
     }
 
     @Override
-    public Name getName() {
-        return name;
+    public Description getDescription() {
+        return description;
     }
 
     public void setPhone(Phone phone) {
@@ -67,14 +67,14 @@ public class Person implements ReadOnlyPerson {
         return email;
     }
 
-    public void setAddress(Address address) {
-        assert address != null;
-        this.address = address;
+    public void setLocation(Location location) {
+        assert location != null;
+        this.location = location;
     }
 
     @Override
-    public Address getAddress() {
-        return address;
+    public Location getLocation() {
+        return location;
     }
 
     @Override
@@ -95,10 +95,10 @@ public class Person implements ReadOnlyPerson {
     public void resetData(ReadOnlyPerson replacement) {
         assert replacement != null;
 
-        this.setName(replacement.getName());
+        this.setDescription(replacement.getDescription());
         this.setPhone(replacement.getPhone());
         this.setEmail(replacement.getEmail());
-        this.setAddress(replacement.getAddress());
+        this.setLocation(replacement.getLocation());
         this.setTags(replacement.getTags());
     }
 
@@ -112,7 +112,7 @@ public class Person implements ReadOnlyPerson {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(description, phone, email, location, tags);
     }
 
     @Override
