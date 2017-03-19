@@ -122,7 +122,7 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, String expectedMessage) {
         WhatsLeft expectedWhatsLeft = new WhatsLeft(model.getWhatsLeft());
-        List<ReadOnlyActivity> expectedShownList = new ArrayList<>(model.getFilteredActivityList());
+        List<ReadOnlyActivity> expectedShownList = new ArrayList<>(model.getFilteredToDoList());
         assertCommandBehavior(true, inputCommand, expectedMessage, expectedWhatsLeft, expectedShownList);
     }
 
@@ -148,7 +148,7 @@ public class LogicManagerTest {
         }
 
         //Confirm the ui display elements should contain the right data
-        assertEquals(expectedShownList, model.getFilteredActivityList());
+        assertEquals(expectedShownList, model.getFilteredToDoList());
 
         //Confirm the state of data (saved and in-memory) is as expected
         assertEquals(expectedWhatsLeft, model.getWhatsLeft());
@@ -176,9 +176,9 @@ public class LogicManagerTest {
     @Test
     public void execute_clear() throws Exception {
         TestDataHelper helper = new TestDataHelper();
-        model.addActivity(helper.generateActivity(1));
-        model.addActivity(helper.generateActivity(2));
-        model.addActivity(helper.generateActivity(3));
+        model.addToDo(helper.generateActivity(1));
+        model.addToDo(helper.generateActivity(2));
+        model.addToDo(helper.generateActivity(3));
 
         assertCommandSuccess("clear", ClearCommand.MESSAGE_SUCCESS, new WhatsLeft(), Collections.emptyList());
     }
@@ -210,13 +210,13 @@ public class LogicManagerTest {
         TestDataHelper helper = new TestDataHelper();
         Activity toBeAdded = helper.adam();
         WhatsLeft expectedAB = new WhatsLeft();
-        expectedAB.addActivity(toBeAdded);
+        expectedAB.addToDo(toBeAdded);
 
         // execute command and verify result
         assertCommandSuccess(helper.generateAddCommand(toBeAdded),
                 String.format(AddCommand.MESSAGE_SUCCESS, toBeAdded),
                 expectedAB,
-                expectedAB.getActivityList());
+                expectedAB.getToDoList());
 
     }
 
@@ -227,7 +227,7 @@ public class LogicManagerTest {
         Activity toBeAdded = helper.adam();
 
         // setup starting state
-        model.addActivity(toBeAdded); // activity already in internal address book
+        model.addToDo(toBeAdded); // activity already in internal address book
 
         // execute command and verify result
         assertCommandFailure(helper.generateAddCommand(toBeAdded),  AddCommand.MESSAGE_DUPLICATE_ACTIVITY);
@@ -240,7 +240,7 @@ public class LogicManagerTest {
         // prepare expectations
         TestDataHelper helper = new TestDataHelper();
         WhatsLeft expectedAB = helper.generateWhatsLeft(2);
-        List<? extends ReadOnlyActivity> expectedList = expectedAB.getActivityList();
+        List<? extends ReadOnlyActivity> expectedList = expectedAB.getToDoList();
 
         // prepare address book state
         helper.addToModel(model, 2);
@@ -281,7 +281,7 @@ public class LogicManagerTest {
         // set AB state to 2 activities
         model.resetData(new WhatsLeft());
         for (Activity p : activityList) {
-            model.addActivity(p);
+            model.addToDo(p);
         }
 
         assertCommandFailure(commandWord + " 3", expectedMessage);
@@ -309,9 +309,9 @@ public class LogicManagerTest {
         assertCommandSuccess("select 2",
                 String.format(SelectCommand.MESSAGE_SELECT_ACTIVITY_SUCCESS, 2),
                 expectedAB,
-                expectedAB.getActivityList());
+                expectedAB.getToDoList());
         assertEquals(1, targetedJumpIndex);
-        assertEquals(model.getFilteredActivityList().get(1), threeActivities.get(1));
+        assertEquals(model.getFilteredToDoList().get(1), threeActivities.get(1));
     }
 
 
@@ -332,13 +332,13 @@ public class LogicManagerTest {
         List<Activity> threeActivities = helper.generateActivityList(3);
 
         WhatsLeft expectedAB = helper.generateWhatsLeft(threeActivities);
-        expectedAB.removeActivity(threeActivities.get(1));
+        expectedAB.removeToDo(threeActivities.get(1));
         helper.addToModel(model, threeActivities);
 
         assertCommandSuccess("delete 2",
                 String.format(DeleteCommand.MESSAGE_DELETE_ACTIVITY_SUCCESS, threeActivities.get(1)),
                 expectedAB,
-                expectedAB.getActivityList());
+                expectedAB.getToDoList());
     }
 
 
@@ -486,7 +486,7 @@ public class LogicManagerTest {
          */
         void addToWhatsLeft(WhatsLeft whatsLeft, List<Activity> activitiesToAdd) throws Exception {
             for (Activity p: activitiesToAdd) {
-                whatsLeft.addActivity(p);
+                whatsLeft.addToDo(p);
             }
         }
 
@@ -503,7 +503,7 @@ public class LogicManagerTest {
          */
         void addToModel(Model model, List<Activity> activitiesToAdd) throws Exception {
             for (Activity p: activitiesToAdd) {
-                model.addActivity(p);
+                model.addToDo(p);
             }
         }
 

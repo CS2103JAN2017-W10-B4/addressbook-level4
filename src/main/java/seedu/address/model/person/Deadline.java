@@ -5,7 +5,7 @@ import java.util.Objects;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.UniqueTagList;
 
-public class Deadline implements ReadOnlyDeadline {
+public class Deadline extends ToDo implements ReadOnlyDeadline {
 
     private Description description;
     private ByDate bydate;
@@ -101,6 +101,19 @@ public class Deadline implements ReadOnlyDeadline {
     }
 
     @Override
+    public void resetData(ReadOnlyToDo editedToDo) {
+        if (editedToDo instanceof ReadOnlyDeadline) {
+            ReadOnlyDeadline replacement = (ReadOnlyDeadline) editedToDo;
+            this.setDescription(replacement.getDescription());
+            this.setByDate(replacement.getByDate());
+            this.setEndTime(replacement.getEndTime());
+            this.setLocation(replacement.getLocation());
+            this.setTags(replacement.getTags());
+        }
+
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof ReadOnlyDeadline // instanceof handles nulls
@@ -117,5 +130,6 @@ public class Deadline implements ReadOnlyDeadline {
     public String toString() {
         return getAsText();
     }
+
 
 }

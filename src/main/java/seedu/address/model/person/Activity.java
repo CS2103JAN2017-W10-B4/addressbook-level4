@@ -9,7 +9,7 @@ import seedu.address.model.tag.UniqueTagList;
  * Represents an Activity in WhatsLeft.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class Activity implements ReadOnlyActivity {
+public class Activity extends ToDo implements ReadOnlyActivity {
 
     private Description description;
     private Priority priority;
@@ -21,7 +21,7 @@ public class Activity implements ReadOnlyActivity {
      * Every field must be present and not null.
      */
     public Activity(Description description, Priority priority, Location location, UniqueTagList tags) {
-        assert !CollectionUtil.isAnyNull(description, priority, location, tags);
+        assert !CollectionUtil.isAnyNull(description, tags);
         this.description = description;
         this.priority = priority;
         this.location = location;
@@ -46,7 +46,6 @@ public class Activity implements ReadOnlyActivity {
     }
 
     public void setPriority(Priority priority) {
-        assert priority != null;
         this.priority = priority;
     }
 
@@ -56,7 +55,6 @@ public class Activity implements ReadOnlyActivity {
     }
 
     public void setLocation(Location location) {
-        assert location != null;
         this.location = location;
     }
 
@@ -90,6 +88,17 @@ public class Activity implements ReadOnlyActivity {
     }
 
     @Override
+    public void resetData(ReadOnlyToDo editedToDo) {
+        if (editedToDo instanceof ReadOnlyActivity) {
+            ReadOnlyActivity edited = (ReadOnlyActivity) editedToDo;
+            this.setDescription(edited.getDescription());
+            this.setPriority(edited.getPriority());
+            this.setLocation(edited.getLocation());
+            this.setTags(edited.getTags());
+        }
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof ReadOnlyActivity // instanceof handles nulls
@@ -106,5 +115,6 @@ public class Activity implements ReadOnlyActivity {
     public String toString() {
         return getAsText();
     }
+
 
 }

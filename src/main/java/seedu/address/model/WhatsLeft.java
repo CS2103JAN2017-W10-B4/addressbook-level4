@@ -11,9 +11,16 @@ import java.util.Set;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.model.person.Activity;
+import seedu.address.model.person.Deadline;
+import seedu.address.model.person.Event;
 import seedu.address.model.person.ReadOnlyActivity;
-import seedu.address.model.person.UniqueActivityList;
-import seedu.address.model.person.UniqueActivityList.DuplicateActivityException;
+import seedu.address.model.person.ReadOnlyDeadline;
+import seedu.address.model.person.ReadOnlyEvent;
+import seedu.address.model.person.ReadOnlyToDo;
+import seedu.address.model.person.ToDo;
+import seedu.address.model.person.UniqueToDoList;
+import seedu.address.model.person.UniqueToDoList.DuplicateToDoException;
+import seedu.address.model.person.UniqueToDoList.ToDoNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 
@@ -23,7 +30,7 @@ import seedu.address.model.tag.UniqueTagList;
  */
 public class WhatsLeft implements ReadOnlyWhatsLeft {
 
-    private final UniqueActivityList activities;
+    private final UniqueToDoList todo;
     private final UniqueTagList tags;
 
     /*
@@ -34,7 +41,7 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
      *   among constructors.
      */
     {
-        activities = new UniqueActivityList();
+        todo = new UniqueToDoList();
         tags = new UniqueTagList();
     }
 
@@ -50,9 +57,9 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
 
 //// list overwrite operations
 
-    public void setActivities(List<? extends ReadOnlyActivity> activities)
-            throws UniqueActivityList.DuplicateActivityException {
-        this.activities.setActivities(activities);
+    public void setToDo(List<? extends ReadOnlyToDo> todo)
+            throws DuplicateToDoException {
+        this.todo.setToDo(todo);
     }
 
     public void setTags(Collection<Tag> tags) throws UniqueTagList.DuplicateTagException {
@@ -62,16 +69,16 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
     public void resetData(ReadOnlyWhatsLeft newData) {
         assert newData != null;
         try {
-            setActivities(newData.getActivityList());
-        } catch (UniqueActivityList.DuplicateActivityException e) {
-            assert false : "WhatsLeft should not have duplicate activities";
+            setToDo(newData.getToDoList());
+        } catch (UniqueToDoList.DuplicateToDoException e) {
+            assert false : "WhatsLeft should not have duplicate todo";
         }
         try {
             setTags(newData.getTagList());
         } catch (UniqueTagList.DuplicateTagException e) {
             assert false : "WhatsLeft should not have duplicate tags";
         }
-        syncMasterTagListWith(activities);
+        syncMasterTagListWith(todo);
     }
 
 //// activity-level operations
@@ -82,31 +89,39 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
      * and updates the Tag objects in the activity to point to those in {@link #tags}.
      *
      * @throws UniqueActivityList.DuplicateActivityException if an equivalent activity already exists.
+     * @throws DuplicateToDoException
      */
-    public void addActivity(Activity a) throws UniqueActivityList.DuplicateActivityException {
+    public void addToDo(ToDo a) throws DuplicateToDoException {
         syncMasterTagListWith(a);
-        activities.add(a);
+        todo.add(a);
     }
 
     /**
      * Updates the activity in the list at position {@code index} with {@code editedReadOnlyActivity}.
      * {@code WhatsLeft}'s tag list will be updated with the tags of {@code editedReadOnlyActivity}.
-     * @see #syncMasterTagListWith(Activity)
+     * @see #syncMasterTagListWith(ToDo)
      *
-     * @throws DuplicateActivityException if updating the activity's details causes the activity to be equivalent to
-     *      another existing activity in the list.
+     * @throws DuplicateToDoException if updating the activity's details causes the activity to be equivalent to
+     *      another existing todo in the list.
+     * @throws DuplicateToDoException
      * @throws IndexOutOfBoundsException if {@code index} < 0 or >= the size of the list.
      */
-    public void updateActivity(int index, ReadOnlyActivity editedReadOnlyActivity)
-            throws UniqueActivityList.DuplicateActivityException {
-        assert editedReadOnlyActivity != null;
-
-        Activity editedActivity = new Activity(editedReadOnlyActivity);
-        syncMasterTagListWith(editedActivity);
+    public void updateToDo(int index, ReadOnlyToDo editedReadOnlyToDo)
+            throws UniqueToDoList.DuplicateToDoException {
+        assert editedReadOnlyToDo != null;
+        ToDo editedToDo = null;
+        if (editedReadOnlyToDo instanceof ReadOnlyActivity) {
+            editedToDo = new Activity((ReadOnlyActivity) editedReadOnlyToDo);
+        } else if (editedReadOnlyToDo instanceof ReadOnlyEvent) {
+            editedToDo = new Event((ReadOnlyEvent) editedReadOnlyToDo);
+        } else if (editedReadOnlyToDo instanceof ReadOnlyDeadline) {
+            editedToDo = new Deadline((ReadOnlyDeadline) editedReadOnlyToDo);
+        }
+        syncMasterTagListWith(editedToDo);
         // TODO: the tags master list will be updated even though the below line fails.
         // This can cause the tags master list to have additional tags that are not tagged to any activity
         // in the activity list.
-        activities.updateActivity(index, editedActivity);
+        todo.updateToDo(index, editedToDo);
     }
 
     /**
@@ -114,8 +129,8 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
      *  - exists in the master list {@link #tags}
      *  - points to a Tag object in the master list
      */
-    private void syncMasterTagListWith(Activity activity) {
-        final UniqueTagList activityTags = activity.getTags();
+    private void syncMasterTagListWith(ToDo a) {
+        final UniqueTagList activityTags = a.getTags();
         tags.mergeFrom(activityTags);
 
         // Create map with values = tag object references in the master list
@@ -126,7 +141,7 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
         // Rebuild the list of activity tags to point to the relevant tags in the master tag list.
         final Set<Tag> correctTagReferences = new HashSet<>();
         activityTags.forEach(tag -> correctTagReferences.add(masterTagObjects.get(tag)));
-        activity.setTags(new UniqueTagList(correctTagReferences));
+        a.setTags(new UniqueTagList(correctTagReferences));
     }
 
     /**
@@ -135,15 +150,15 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
      *  - points to a Tag object in the master list
      *  @see #syncMasterTagListWith(Activity)
      */
-    private void syncMasterTagListWith(UniqueActivityList activities) {
-        activities.forEach(this::syncMasterTagListWith);
+    private void syncMasterTagListWith(UniqueToDoList todo) {
+        todo.forEach(this::syncMasterTagListWith);
     }
 
-    public boolean removeActivity(ReadOnlyActivity key) throws UniqueActivityList.ActivityNotFoundException {
-        if (activities.remove(key)) {
+    public boolean removeToDo(ReadOnlyToDo key) throws ToDoNotFoundException {
+        if (todo.remove(key)) {
             return true;
         } else {
-            throw new UniqueActivityList.ActivityNotFoundException();
+            throw new UniqueToDoList.ToDoNotFoundException();
         }
     }
 
@@ -157,13 +172,13 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
 
     @Override
     public String toString() {
-        return activities.asObservableList().size() + " activities, " + tags.asObservableList().size() +  " tags";
+        return todo.asObservableList().size() + " todo, " + tags.asObservableList().size() +  " tags";
         // TODO: refine later
     }
 
     @Override
-    public ObservableList<ReadOnlyActivity> getActivityList() {
-        return new UnmodifiableObservableList<>(activities.asObservableList());
+    public ObservableList<ReadOnlyToDo> getToDoList() {
+        return new UnmodifiableObservableList<>(todo.asObservableList());
     }
 
     @Override
@@ -175,13 +190,13 @@ public class WhatsLeft implements ReadOnlyWhatsLeft {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof WhatsLeft // instanceof handles nulls
-                && this.activities.equals(((WhatsLeft) other).activities)
+                && this.todo.equals(((WhatsLeft) other).todo)
                 && this.tags.equalsOrderInsensitive(((WhatsLeft) other).tags));
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(activities, tags);
+        return Objects.hash(todo, tags);
     }
 }

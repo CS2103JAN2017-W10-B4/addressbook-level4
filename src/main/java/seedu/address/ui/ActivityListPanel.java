@@ -14,6 +14,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.ActivityPanelSelectionChangedEvent;
 import seedu.address.commons.util.FxViewUtil;
 import seedu.address.model.person.ReadOnlyActivity;
+import seedu.address.model.person.ReadOnlyToDo;
 
 /**
  * Panel containing the list of activities.
@@ -23,15 +24,15 @@ public class ActivityListPanel extends UiPart<Region> {
     private static final String FXML = "ActivityListPanel.fxml";
 
     @FXML
-    private ListView<ReadOnlyActivity> activityListView;
+    private ListView<ReadOnlyToDo> activityListView;
 
-    public ActivityListPanel(AnchorPane activityListPlaceholder, ObservableList<ReadOnlyActivity> activityList) {
+    public ActivityListPanel(AnchorPane activityListPlaceholder, ObservableList<ReadOnlyToDo> activityList) {
         super(FXML);
         setConnections(activityList);
         addToPlaceholder(activityListPlaceholder);
     }
 
-    private void setConnections(ObservableList<ReadOnlyActivity> activityList) {
+    private void setConnections(ObservableList<ReadOnlyToDo> activityList) {
         activityListView.setItems(activityList);
         activityListView.setCellFactory(listView -> new ActivityListViewCell());
         setEventHandlerForSelectionChangeEvent();
@@ -60,10 +61,10 @@ public class ActivityListPanel extends UiPart<Region> {
         });
     }
 
-    class ActivityListViewCell extends ListCell<ReadOnlyActivity> {
+    class ActivityListViewCell extends ListCell<ReadOnlyToDo> {
 
         @Override
-        protected void updateItem(ReadOnlyActivity activity, boolean empty) {
+        protected void updateItem(ReadOnlyToDo activity, boolean empty) {
             super.updateItem(activity, empty);
 
             if (empty || activity == null) {

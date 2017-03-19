@@ -7,7 +7,7 @@ import seedu.address.model.person.Activity;
 import seedu.address.model.person.Description;
 import seedu.address.model.person.Location;
 import seedu.address.model.person.Priority;
-import seedu.address.model.person.UniqueActivityList.DuplicateActivityException;
+import seedu.address.model.person.UniqueToDoList.DuplicateToDoException;
 import seedu.address.model.tag.UniqueTagList;
 
 public class SampleDataUtil {
@@ -42,10 +42,10 @@ public class SampleDataUtil {
         try {
             WhatsLeft sampleAB = new WhatsLeft();
             for (Activity sampleActivity : getSampleActivities()) {
-                sampleAB.addActivity(sampleActivity);
+                sampleAB.addToDo(sampleActivity);
             }
             return sampleAB;
-        } catch (DuplicateActivityException e) {
+        } catch (DuplicateToDoException e) {
             throw new AssertionError("sample data cannot contain duplicate activities", e);
         }
     }

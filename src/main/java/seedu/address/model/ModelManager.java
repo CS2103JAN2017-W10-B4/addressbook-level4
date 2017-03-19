@@ -10,10 +10,10 @@ import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.commons.events.model.WhatsLeftChangedEvent;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.StringUtil;
-import seedu.address.model.person.Activity;
-import seedu.address.model.person.ReadOnlyActivity;
-import seedu.address.model.person.UniqueActivityList;
-import seedu.address.model.person.UniqueActivityList.ActivityNotFoundException;
+import seedu.address.model.person.ReadOnlyToDo;
+import seedu.address.model.person.ToDo;
+import seedu.address.model.person.UniqueToDoList.DuplicateToDoException;
+import seedu.address.model.person.UniqueToDoList.ToDoNotFoundException;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -23,7 +23,7 @@ public class ModelManager extends ComponentManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
     private final WhatsLeft whatsLeft;
-    private final FilteredList<ReadOnlyActivity> filteredActivities;
+    private final FilteredList<ReadOnlyToDo> filteredToDo;
 
     /**
      * Initializes a ModelManager with the given whatsLeft and userPrefs.
@@ -35,7 +35,7 @@ public class ModelManager extends ComponentManager implements Model {
         logger.fine("Initializing with WhatsLeft: " + whatsLeft + " and user prefs " + userPrefs);
 
         this.whatsLeft = new WhatsLeft(whatsLeft);
-        filteredActivities = new FilteredList<>(this.whatsLeft.getActivityList());
+        filteredToDo = new FilteredList<>(this.whatsLeft.getToDoList());
     }
 
     public ModelManager() {
@@ -59,53 +59,53 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void deleteActivity(ReadOnlyActivity target) throws ActivityNotFoundException {
-        whatsLeft.removeActivity(target);
+    public synchronized void deleteToDo(ReadOnlyToDo target) throws ToDoNotFoundException {
+        whatsLeft.removeToDo(target);
         indicateWhatsLeftChanged();
     }
 
     @Override
-    public synchronized void addActivity(Activity activity) throws UniqueActivityList.DuplicateActivityException {
-        whatsLeft.addActivity(activity);
+    public synchronized void addToDo(ToDo todo) throws DuplicateToDoException {
+        whatsLeft.addToDo(todo);
         updateFilteredListToShowAll();
         indicateWhatsLeftChanged();
     }
 
     @Override
-    public void updateActivity(int filteredActivityListIndex, ReadOnlyActivity editedActivity)
-            throws UniqueActivityList.DuplicateActivityException {
-        assert editedActivity != null;
+    public void updateToDo(int filteredToDoListIndex, ReadOnlyToDo editedToDo)
+            throws DuplicateToDoException {
+        assert editedToDo != null;
 
-        int addressBookIndex = filteredActivities.getSourceIndex(filteredActivityListIndex);
-        whatsLeft.updateActivity(addressBookIndex, editedActivity);
+        int addressBookIndex = filteredToDo.getSourceIndex(filteredToDoListIndex);
+        whatsLeft.updateToDo(addressBookIndex, editedToDo);
         indicateWhatsLeftChanged();
     }
 
     //=========== Filtered Activity List Accessors =============================================================
 
     @Override
-    public UnmodifiableObservableList<ReadOnlyActivity> getFilteredActivityList() {
-        return new UnmodifiableObservableList<>(filteredActivities);
+    public UnmodifiableObservableList<ReadOnlyToDo> getFilteredToDoList() {
+        return new UnmodifiableObservableList<>(filteredToDo);
     }
 
     @Override
     public void updateFilteredListToShowAll() {
-        filteredActivities.setPredicate(null);
+        filteredToDo.setPredicate(null);
     }
 
     @Override
-    public void updateFilteredActivityList(Set<String> keywords) {
-        updateFilteredActivityList(new PredicateExpression(new NameQualifier(keywords)));
+    public void updateFilteredToDoList(Set<String> keywords) {
+        updateFilteredToDoList(new PredicateExpression(new NameQualifier(keywords)));
     }
 
-    private void updateFilteredActivityList(Expression expression) {
-        filteredActivities.setPredicate(expression::satisfies);
+    private void updateFilteredToDoList(Expression expression) {
+        filteredToDo.setPredicate(expression::satisfies);
     }
 
     //========== Inner classes/interfaces used for filtering =================================================
 
     interface Expression {
-        boolean satisfies(ReadOnlyActivity activity);
+        boolean satisfies(ReadOnlyToDo todo);
         String toString();
     }
 
@@ -118,8 +118,8 @@ public class ModelManager extends ComponentManager implements Model {
         }
 
         @Override
-        public boolean satisfies(ReadOnlyActivity activity) {
-            return qualifier.run(activity);
+        public boolean satisfies(ReadOnlyToDo todo) {
+            return qualifier.run(todo);
         }
 
         @Override
@@ -129,7 +129,7 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     interface Qualifier {
-        boolean run(ReadOnlyActivity activity);
+        boolean run(ReadOnlyToDo todo);
         String toString();
     }
 
@@ -141,9 +141,9 @@ public class ModelManager extends ComponentManager implements Model {
         }
 
         @Override
-        public boolean run(ReadOnlyActivity activity) {
+        public boolean run(ReadOnlyToDo todo) {
             return nameKeyWords.stream()
-                    .filter(keyword -> StringUtil.containsWordIgnoreCase(activity.
+                    .filter(keyword -> StringUtil.containsWordIgnoreCase(todo.
                     getDescription().description, keyword))
                     .findAny()
                     .isPresent();

@@ -5,7 +5,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.commons.events.ui.JumpToListRequestEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.person.ReadOnlyActivity;
+import seedu.address.model.person.ReadOnlyToDo;
 
 /**
  * Selects an activity identified using it's last displayed index from WhatsLeft.
@@ -30,7 +30,7 @@ public class SelectCommand extends Command {
     @Override
     public CommandResult execute() throws CommandException {
 
-        UnmodifiableObservableList<ReadOnlyActivity> lastShownList = model.getFilteredActivityList();
+        UnmodifiableObservableList<ReadOnlyToDo> lastShownList = model.getFilteredToDoList();
 
         if (lastShownList.size() < targetIndex) {
             throw new CommandException(Messages.MESSAGE_INVALID_ACTIVITY_DISPLAYED_INDEX);

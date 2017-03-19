@@ -6,7 +6,7 @@ import seedu.address.model.tag.UniqueTagList;
  * A read-only immutable interface for an Deadline in WhatsLeft.
  * Implementations should guarantee: details are present and not null, field values are validated.
  */
-public interface ReadOnlyDeadline {
+public interface ReadOnlyDeadline extends ReadOnlyToDo {
 
     Description getDescription();
     ByDate getByDate();

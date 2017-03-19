@@ -41,12 +41,12 @@ public class XmlSerializableWhatsLeft implements ReadOnlyWhatsLeft {
      */
     public XmlSerializableWhatsLeft(ReadOnlyWhatsLeft src) {
         this();
-        activities.addAll(src.getActivityList().stream().map(XmlAdaptedActivity::new).collect(Collectors.toList()));
+        activities.addAll(src.getToDoList().stream().map(XmlAdaptedActivity::new).collect(Collectors.toList()));
         tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
     }
 
     @Override
-    public ObservableList<ReadOnlyActivity> getActivityList() {
+    public ObservableList<ReadOnlyActivity> getToDoList() {
         final ObservableList<Activity> persons = this.activities.stream().map(p -> {
             try {
                 return p.toModelType();

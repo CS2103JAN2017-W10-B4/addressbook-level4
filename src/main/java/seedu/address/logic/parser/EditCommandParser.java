@@ -1,9 +1,14 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BYDATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ENDTIME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FROMDATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LOCATION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRIORITY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STARTTIME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TODATE;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +19,8 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditActivityDescriptor;
+import seedu.address.logic.commands.EditCommand.EditDeadlineDescriptor;
+import seedu.address.logic.commands.EditCommand.EditEventDescriptor;
 import seedu.address.logic.commands.IncorrectCommand;
 import seedu.address.model.tag.UniqueTagList;
 
@@ -29,7 +36,8 @@ public class EditCommandParser {
     public Command parse(String args) {
         assert args != null;
         ArgumentTokenizer argsTokenizer =
-                new ArgumentTokenizer(PREFIX_PRIORITY, PREFIX_LOCATION, PREFIX_TAG);
+                new ArgumentTokenizer(PREFIX_PRIORITY, PREFIX_LOCATION, PREFIX_TAG, PREFIX_FROMDATE,
+                        PREFIX_TODATE, PREFIX_BYDATE, PREFIX_STARTTIME, PREFIX_ENDTIME);
         argsTokenizer.tokenize(args);
         List<Optional<String>> preambleFields = ParserUtil.splitPreamble(argsTokenizer.getPreamble().orElse(""), 2);
 
@@ -39,9 +47,11 @@ public class EditCommandParser {
         }
 
         EditActivityDescriptor editActivityDescriptor = new EditActivityDescriptor();
+        EditEventDescriptor editEventDescriptor = new EditEventDescriptor();
+        EditDeadlineDescriptor editDeadlineDescriptor = new EditDeadlineDescriptor();
         try {
             editActivityDescriptor.setDescription(ParserUtil.parseDescription(preambleFields.get(1)));
-            editActivityDescriptor.setPriority(ParserUtil.parsePhone(argsTokenizer.getValue(PREFIX_PRIORITY)));
+            editActivityDescriptor.setPriority(ParserUtil.parsePriority(argsTokenizer.getValue(PREFIX_PRIORITY)));
             editActivityDescriptor.setLocation(ParserUtil.parseLocation(argsTokenizer.getValue(PREFIX_LOCATION)));
             editActivityDescriptor.setTags(parseTagsForEdit(ParserUtil.toSet(argsTokenizer.getAllValues(PREFIX_TAG))));
         } catch (IllegalValueException ive) {
@@ -52,7 +62,7 @@ public class EditCommandParser {
             return new IncorrectCommand(EditCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new EditCommand(index.get(), editActivityDescriptor);
+        return new EditCommand(index.get(), editActivityDescriptor, editEventDescriptor, editDeadlineDescriptor);
     }
 
     /**

@@ -5,7 +5,7 @@ import java.util.Objects;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.UniqueTagList;
 
-public class Event implements ReadOnlyEvent {
+public class Event extends ToDo implements ReadOnlyEvent {
 
     private Description description;
     private FromDate fromdate;
@@ -125,6 +125,21 @@ public class Event implements ReadOnlyEvent {
     }
 
     @Override
+    public void resetData(ReadOnlyToDo editedToDo) {
+        if (editedToDo instanceof ReadOnlyEvent) {
+            ReadOnlyEvent replacement = (ReadOnlyEvent) editedToDo;
+            this.setDescription(replacement.getDescription());
+            this.setFromDate(replacement.getFromDate());
+            this.setToDate(replacement.getToDate());
+            this.setStartTime(replacement.getStartTime());
+            this.setEndTime(replacement.getEndTime());
+            this.setLocation(replacement.getLocation());
+            this.setTags(replacement.getTags());
+        }
+
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof ReadOnlyEvent // instanceof handles nulls
@@ -141,5 +156,6 @@ public class Event implements ReadOnlyEvent {
     public String toString() {
         return getAsText();
     }
+
 
 }

@@ -46,7 +46,7 @@ public class TypicalTestActivities {
     public static void loadWhatsLeftWithSampleData(WhatsLeft ab) {
         for (TestActivity activity : new TypicalTestActivities().getTypicalActivities()) {
             try {
-                ab.addActivity(new Activity(activity));
+                ab.addToDo(new Activity(activity));
             } catch (UniqueActivityList.DuplicateActivityException e) {
                 assert false : "not possible";
             }

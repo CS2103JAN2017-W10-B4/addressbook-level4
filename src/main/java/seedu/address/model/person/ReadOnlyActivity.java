@@ -6,7 +6,7 @@ import seedu.address.model.tag.UniqueTagList;
  * A read-only immutable interface for an Activity in WhatsLeft.
  * Implementations should guarantee: details are present and not null, field values are validated.
  */
-public interface ReadOnlyActivity {
+public interface ReadOnlyActivity extends ReadOnlyToDo {
 
     Description getDescription();
     Priority getPriority();

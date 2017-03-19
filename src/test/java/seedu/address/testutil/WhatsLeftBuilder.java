@@ -20,7 +20,7 @@ public class WhatsLeftBuilder {
     }
 
     public WhatsLeftBuilder withActivity(Activity activity) throws UniqueActivityList.DuplicateActivityException {
-        whatsLeft.addActivity(activity);
+        whatsLeft.addToDo(activity);
         return this;
     }
 

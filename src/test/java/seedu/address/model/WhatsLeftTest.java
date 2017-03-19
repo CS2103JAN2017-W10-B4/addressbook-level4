@@ -28,7 +28,7 @@ public class WhatsLeftTest {
 
     @Test
     public void constructor() {
-        assertEquals(Collections.emptyList(), addressBook.getActivityList());
+        assertEquals(Collections.emptyList(), addressBook.getToDoList());
         assertEquals(Collections.emptyList(), addressBook.getTagList());
     }
 
@@ -60,7 +60,7 @@ public class WhatsLeftTest {
     @Test
     public void resetData_withDuplicateTags_throwsAssertionError() {
         WhatsLeft typicalWhatsLeft = new TypicalTestActivities().getTypicalWhatsLeft();
-        List<ReadOnlyActivity> newActivities = typicalWhatsLeft.getActivityList();
+        List<ReadOnlyActivity> newActivities = typicalWhatsLeft.getToDoList();
         List<Tag> newTags = new ArrayList<>(typicalWhatsLeft.getTagList());
         // Repeat the first tag twice
         newTags.add(newTags.get(0));
@@ -83,7 +83,7 @@ public class WhatsLeftTest {
         }
 
         @Override
-        public ObservableList<ReadOnlyActivity> getActivityList() {
+        public ObservableList<ReadOnlyActivity> getToDoList() {
             return persons;
         }
 

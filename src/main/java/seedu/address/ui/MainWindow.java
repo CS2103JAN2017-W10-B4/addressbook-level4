@@ -114,7 +114,7 @@ public class MainWindow extends UiPart<Region> {
 
     void fillInnerParts() {
         browserPanel = new BrowserPanel(browserPlaceholder);
-        activityListPanel = new ActivityListPanel(getActivityListPlaceholder(), logic.getFilteredActivityList());
+        activityListPanel = new ActivityListPanel(getActivityListPlaceholder(), logic.getFilteredToDoList());
         new ResultDisplay(getResultDisplayPlaceholder());
         new StatusBarFooter(getStatusbarPlaceholder(), config.getWhatsLeftFilePath());
         new CommandBox(getCommandBoxPlaceholder(), logic);
