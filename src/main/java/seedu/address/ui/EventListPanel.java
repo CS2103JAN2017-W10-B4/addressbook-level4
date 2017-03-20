@@ -23,9 +23,9 @@ public class EventListPanel extends UiPart<Region> {
     private static final String FXML = "EventListPanel.fxml";
 
     @FXML
-    private ListView<ReadOnlyActivity> eventListView;
+    private ListView<ReadOnlyEvent> eventListView;
 
-    public ActivityListPanel(AnchorPane eventListPlaceholder, ObservableList<ReadOnlyEvent> eventList) {
+    public EventListPanel(AnchorPane eventListPlaceholder, ObservableList<ReadOnlyEvent> eventList) {
         super(FXML);
         setConnections(eventList);
         addToPlaceholder(eventListPlaceholder);

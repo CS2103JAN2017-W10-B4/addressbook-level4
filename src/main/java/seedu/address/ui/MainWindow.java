@@ -8,6 +8,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import seedu.address.commons.core.Config;
@@ -17,6 +18,8 @@ import seedu.address.commons.util.FxViewUtil;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.ReadOnlyActivity;
+import seedu.address.model.person.ReadOnlyDeadline;
+import seedu.address.model.person.ReadOnlyEvent;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -35,6 +38,8 @@ public class MainWindow extends UiPart<Region> {
     // Independent Ui parts residing in this Ui container
     private BrowserPanel browserPanel;
     private ActivityListPanel activityListPanel;
+    private DeadlineListPanel deadlineListPanel;
+    private EventListPanel eventListPanel;
     private Config config;
 
     @FXML
@@ -47,7 +52,16 @@ public class MainWindow extends UiPart<Region> {
     private MenuItem helpMenuItem;
 
     @FXML
+    private TabPane toDoPanePlaceHolder;
+    
+    @FXML
     private AnchorPane activityListPanelPlaceholder;
+    
+    @FXML
+    private AnchorPane deadlineListPanelPlaceholder;
+    
+    @FXML
+    private AnchorPane eventListPanelPlaceholder;
 
     @FXML
     private AnchorPane resultDisplayPlaceholder;
@@ -114,7 +128,10 @@ public class MainWindow extends UiPart<Region> {
 
     void fillInnerParts() {
         browserPanel = new BrowserPanel(browserPlaceholder);
-        activityListPanel = new ActivityListPanel(getActivityListPlaceholder(), logic.getFilteredActivityList());
+        activityListPanel = new ActivityListPanel(getActivityListPlaceholder(), logic.getFilteredToDoList());
+        deadlineListPanel = new DeadlineListPanel(getDeadlineListPlaceholder(), logic.getFilteredToDoList());
+        eventListPanel = new EventListPanel(getEventListPlaceholder(), logic.getFilteredToDoList());
+        toDoPanePlaceHolder= new TabPane(activityListPanel, deadlineListPanel, eventListPanel);
         new ResultDisplay(getResultDisplayPlaceholder());
         new StatusBarFooter(getStatusbarPlaceholder(), config.getWhatsLeftFilePath());
         new CommandBox(getCommandBoxPlaceholder(), logic);
@@ -134,6 +151,14 @@ public class MainWindow extends UiPart<Region> {
 
     private AnchorPane getActivityListPlaceholder() {
         return activityListPanelPlaceholder;
+    }
+    
+    private AnchorPane getEventListPlaceholder() {
+        return eventListPanelPlaceholder;
+    }
+    
+    private AnchorPane getDeadlineListPlaceholder() {
+        return deadlineListPanelPlaceholder;
     }
 
     void hide() {
@@ -198,9 +223,25 @@ public class MainWindow extends UiPart<Region> {
     public ActivityListPanel getActivityListPanel() {
         return this.activityListPanel;
     }
+    
+    public DeadlineListPanel getDeadlineListPanel() {
+        return this.deadlineListPanel;
+    }
+    
+    public EventListPanel getEventListPanel() {
+        return this.eventListPanel;
+    }
 
     void loadActivityPage(ReadOnlyActivity activity) {
         browserPanel.loadActivityPage(activity);
+    }
+    
+    void loadEventPage(ReadOnlyEvent event) {
+        browserPanel.loadEventPage(event);
+    }
+    
+    void loadDeadlinePage(ReadOnlyDeadline deadline) {
+        browserPanel.loadDeadlinePage(deadline);
     }
 
     void releaseResources() {

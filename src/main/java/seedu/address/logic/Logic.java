@@ -4,6 +4,8 @@ import javafx.collections.ObservableList;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.ReadOnlyActivity;
+import seedu.address.model.person.ReadOnlyEvent;
+import seedu.address.model.person.ReadOnlyDeadline;
 
 /**
  * API of the Logic component
@@ -19,5 +21,7 @@ public interface Logic {
 
     /** Returns the filtered list of activities */
     ObservableList<ReadOnlyActivity> getFilteredActivityList();
+    ObservableList<ReadOnlyDeadline> getFilteredDeadlineList();
+    ObservableList<ReadOnlyEvent> getFilteredEventList();
 
 }

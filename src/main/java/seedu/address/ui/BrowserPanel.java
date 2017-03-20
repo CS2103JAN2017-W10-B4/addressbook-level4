@@ -7,6 +7,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
 import seedu.address.commons.util.FxViewUtil;
 import seedu.address.model.person.ReadOnlyActivity;
+import seedu.address.model.person.ReadOnlyEvent;
+import seedu.address.model.person.ReadOnlyDeadline;
+
 
 /**
  * The Browser Panel of the App.
@@ -31,6 +34,14 @@ public class BrowserPanel extends UiPart<Region> {
 
     public void loadActivityPage(ReadOnlyActivity activity) {
         loadPage("https://www.google.com.sg/#safe=off&q=" + activity.getDescription().description.replaceAll(" ", "+"));
+    }
+    
+    public void loadDeadlinePage(ReadOnlyDeadline deadline) {
+        loadPage("https://www.google.com.sg/#safe=off&q=" + deadline.getDescription().description.replaceAll(" ", "+"));
+    }
+    
+    public void loadEventPage(ReadOnlyEvent event) {
+        loadPage("https://www.google.com.sg/#safe=off&q=" + event.getDescription().description.replaceAll(" ", "+"));
     }
 
     public void loadPage(String url) {

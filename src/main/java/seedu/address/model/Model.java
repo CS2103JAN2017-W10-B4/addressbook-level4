@@ -20,9 +20,18 @@ public interface Model {
 
     /** Deletes the given activity. */
     void deleteActivity(ReadOnlyActivity target) throws UniqueActivityList.ActivityNotFoundException;
+    
+    void deleteEvent(ReadOnlyEvent target) throws UniqueEventList.EventNotFoundException;
+    
+    void deleteDeadline(ReadOnlyDeadline target) throws UniqueDeadlineList.DeadlineNotFoundException;
+
 
     /** Adds the given activity */
     void addActivity(Activity activity) throws UniqueActivityList.DuplicateActivityException;
+
+    void addDeadline(Deadline deadline) throws UniqueDeadlineList.DuplicateDeadlineException;
+
+    void addEvent(Event event) throws UniqueEventList.DuplicateEventException;
 
     /**
      * Updates the activity located at {@code filteredActivityListIndex} with {@code editedActivity}.
@@ -33,14 +42,33 @@ public interface Model {
      */
     void updateActivity(int filteredActivityListIndex, ReadOnlyActivity editedActivity)
             throws UniqueActivityList.DuplicateActivityException;
+    
+    void updateDeadline(int filteredDeadlineListIndex, ReadOnlyDeadline editedDeadline)
+            throws UniqueDeadlineList.DuplicateDeadlineException;
+    
+    void updateEvent(int filteredEventListIndex, ReadOnlyEvent editedEvent)
+            throws UniqueEventList.DuplicateEventException;
 
     /** Returns the filtered activity list as an {@code UnmodifiableObservableList<ReadOnlyActivity>} */
     UnmodifiableObservableList<ReadOnlyActivity> getFilteredActivityList();
 
+    UnmodifiableObservableList<ReadOnlyDeadline> getFilteredDeadlineList();
+
+    UnmodifiableObservableList<ReadOnlyEvent> getFilteredEventList();
+    
     /** Updates the filter of the filtered activity list to show all activities */
-    void updateFilteredListToShowAll();
+    void updateFilteredActivityListToShowAll();
+
+    void updateFilteredeDeadlineListToShowAll();
+    
+    void updateFilteredEventListToShowAll();
 
     /** Updates the filter of the filtered activity list to filter by the given keywords*/
     void updateFilteredActivityList(Set<String> keywords);
+    
+    void updateFilteredActivityList(Set<String> keywords);
+    
+    void updateFilteredActivityList(Set<String> keywords);
+
 
 }
