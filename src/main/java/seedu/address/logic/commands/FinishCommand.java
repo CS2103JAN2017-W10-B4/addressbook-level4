@@ -27,7 +27,7 @@ public class FinishCommand extends Command {
     private final int filteredActivityListIndex;
 
     // @@author A0121668A
-    public FinishCommand(int filteredActivityListIndex, String targetType) {
+    public FinishCommand(int filteredActivityListIndex) {
         assert filteredActivityListIndex > 0;
         this.filteredActivityListIndex = filteredActivityListIndex - 1;
     }

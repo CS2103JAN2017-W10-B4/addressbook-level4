@@ -78,6 +78,7 @@ public interface Model {
     /** Empties the previousCommand list and adds the newest one in, always keeping only 1*/
     void storePreviousCommand(String command);
 
+
     /** Finds the index of the event in the filtered list*/
     int findEventIndex(Event event);
 
