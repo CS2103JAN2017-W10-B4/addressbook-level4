@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.commons.exceptions.DuplicateDataException;
 import seedu.address.commons.util.CollectionUtil;
-import seedu.address.model.person.UniqueTaskList.TaskNotFoundException;
+import seedu.address.commons.util.StringUtil;
 
 /**
  * A list of tasks that enforces uniqueness between its elements and does not allow nulls.
@@ -58,6 +58,19 @@ public class UniqueTaskList implements Iterable<Task> {
         if (!taskToUpdate.equals(editedTask) && internalList.contains(editedTask)) {
             throw new DuplicateTaskException();
         }
+        if (editedTask.getByTime().getValue() != null && editedTask.getByDate().getValue() == null &&
+                taskToUpdate.getByDate().getValue() == null) {
+            editedTask = new Task(editedTask.getDescription(), editedTask.getPriority(), editedTask.getByTime()
+                    , new ByDate(StringUtil.parseStringToDate(StringUtil.getTodayDateInString())), editedTask.getLocation(), editedTask.getTags()
+                    , editedTask.getStatus());
+        }
+        
+        if (editedTask.getByDate() != null && editedTask.getByTime().getValue() == null &&
+                taskToUpdate.getByTime().getValue() == null) {
+            editedTask = new Task(editedTask.getDescription(), editedTask.getPriority(), new ByTime(StringUtil.parseStringToTime("2359"))
+                    , editedTask.getByDate(), editedTask.getLocation(), editedTask.getTags()
+                    , editedTask.getStatus());
+        }
 
         taskToUpdate.resetData(editedTask);
         // TODO: The code below is just a workaround to notify observers of the updated task.
@@ -78,6 +91,17 @@ public class UniqueTaskList implements Iterable<Task> {
         internalList.set(index, taskToComplete);
     }
 
+    /**
+     * Marks the task in the list at position {@code index} as pending.
+     *
+     * @throws IndexOutOfBoundsException if {@code index} < 0 or >= the size of the list.
+     */
+    public void RedoTask(int index) {
+        Task taskToComplete = internalList.get(index);
+        taskToComplete.redoTask();
+        internalList.set(index, taskToComplete);
+    }
+    
     /**
      * Removes the equivalent Task from the list.
      *
@@ -140,5 +164,4 @@ public class UniqueTaskList implements Iterable<Task> {
      * there is no such matching task in the list.
      */
     public static class TaskNotFoundException extends Exception {}
-
 }
