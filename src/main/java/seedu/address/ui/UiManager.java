@@ -20,6 +20,8 @@ import seedu.address.commons.events.ui.ShowHelpRequestEvent;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
+import seedu.address.commons.events.ui.UpdateCalendarEvent;
+import seedu.address.commons.exceptions.CalendarUnsyncException;
 
 //@@author A0148038A
 /**
@@ -118,12 +120,26 @@ public class UiManager extends ComponentManager implements Ui {
     private void handleJumpToEventListRequestEvent(JumpToEventListRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         mainWindow.getEventListPanel().scrollTo(event.targetIndex);
+    //@@author A0124377A
+        try {
+			mainWindow.getCalendarPanel().select(event.targetEvent);
+		} catch (CalendarUnsyncException e) {
+			logger.severe(StringUtil.getDetails(e));
+			showFatalErrorDialogAndShutdown("Fatal error unsycn calendar:", e);
+		}
     }
     
     @Subscribe
     private void handleJumpToTaskListRequestEvent(JumpToTaskListRequestEvent task) {
         logger.info(LogsCenter.getEventHandlingLogMessage(task));
         mainWindow.getTaskListPanel().scrollTo(task.targetIndex);
+    //@@author A0124377A
+        try {
+			mainWindow.getCalendarPanel().select(task.targetTask);
+		} catch (CalendarUnsyncException e) {
+			logger.severe(StringUtil.getDetails(e));
+			showFatalErrorDialogAndShutdown("Fatal error unsycn calendar:", e);
+		}
     }
 
     
