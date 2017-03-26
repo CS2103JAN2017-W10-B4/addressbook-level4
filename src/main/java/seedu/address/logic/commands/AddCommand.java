@@ -9,6 +9,8 @@ import seedu.address.commons.events.ui.JumpToEventListRequestEvent;
 import seedu.address.commons.events.ui.JumpToTaskListRequestEvent;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.ModelManager;
+import seedu.address.model.ReadOnlyWhatsLeft;
 import seedu.address.model.person.ByDate;
 import seedu.address.model.person.ByTime;
 import seedu.address.model.person.Description;
@@ -93,15 +95,19 @@ public class AddCommand extends Command {
         assert model != null;
         try {
             model.storePreviousCommand("");
+            ReadOnlyWhatsLeft currState = model.getWhatsLeft();
+            ModelManager.setPreviousState(currState);
             if (toAddTask == null) {
                 model.addEvent(toAddEvent);
                 UnmodifiableObservableList<ReadOnlyEvent> lastShownList = model.getFilteredEventList();
                 EventsCenter.getInstance().post(new JumpToEventListRequestEvent(lastShownList.indexOf(toAddEvent)));
+                model.storePreviousCommand("add");
                 return new CommandResult(String.format(MESSAGE_SUCCESS, toAddEvent));
             } else if (toAddEvent == null) {
                 model.addTask(toAddTask);
                 UnmodifiableObservableList<ReadOnlyTask> lastShownList = model.getFilteredTaskList();
                 EventsCenter.getInstance().post(new JumpToTaskListRequestEvent(lastShownList.indexOf(toAddTask)));
+                model.storePreviousCommand("add");
                 return new CommandResult(String.format(MESSAGE_SUCCESS, toAddTask));
             }
         } catch (UniqueEventList.DuplicateEventException | UniqueTaskList.DuplicateTaskException e) {

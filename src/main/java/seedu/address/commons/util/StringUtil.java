@@ -2,10 +2,16 @@ package seedu.address.commons.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+<<<<<<< HEAD
+import java.time.format.FormatStyle;
+=======
+import java.util.Date;
+>>>>>>> 26d3eb079fcf24084d8e54d98fdea3fc9e529f4b
 
 /**
  * Helper functions for handling strings.
@@ -20,8 +26,9 @@ public class StringUtil {
     public static final int YEAR_CONVERSION_INDEX = 2000;
     
     public static final String DATE_VALIDATION_REGEX = "([0123][\\d])([01][\\d])([\\d][\\d])";
-    
-    //@@author
+    //@@author A0124377A
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+
     /**
      * Returns true if the {@code sentence} contains the {@code word}.
      *   Ignores case, but a full word match is required.
@@ -111,5 +118,15 @@ public class StringUtil {
     public static boolean isUnsignedInteger(String s) {
         return s != null && s.matches("^0*[1-9]\\d*$");
     }
+    
+    //@@author A0110491U
+    /** 
+     * returns today's date in DDMMYY format in string
+     */
+    public static String getTodayDateInString() {
+        String todaydate = new SimpleDateFormat("ddMMyy").format(new Date());
+        return todaydate;
+    }
+    //@@author
     
 }

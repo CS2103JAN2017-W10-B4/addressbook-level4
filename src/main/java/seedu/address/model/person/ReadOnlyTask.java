@@ -40,7 +40,8 @@ public interface ReadOnlyTask {
                     other.getByTime().toString().equals(this.getByTime().toString()))
                 && (other.getLocation().toString() == null? this.getLocation().toString() == null :
                     other.getLocation().toString().equals(this.getLocation().toString()))
-                && (other.getTags().equals(other.getTags()))
+                && (other.getTags().equals(this.getTags()))
+                &&(other.getStatus()==this.getStatus())
                 );
     }
 

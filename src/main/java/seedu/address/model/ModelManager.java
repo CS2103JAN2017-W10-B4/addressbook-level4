@@ -106,7 +106,15 @@ public class ModelManager extends ComponentManager implements Model {
         indicateWhatsLeftChanged();
     }
     
-    // @@author A0148038A
+    @Override
+    public synchronized void MarkTaskAsPending(int filteredTaskListIndex) throws TaskNotFoundException {
+        int addressBookIndex = filteredTasks.getSourceIndex(filteredTaskListIndex);
+        whatsLeft.RedoTask(addressBookIndex);
+        updateFilteredListToShowAll();
+        indicateWhatsLeftChanged();
+    }
+    // @@author
+
     @Override
     public synchronized void addEvent(Event event)
             throws UniqueEventList.DuplicateEventException, DuplicateTimeClashException {

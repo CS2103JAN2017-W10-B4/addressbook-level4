@@ -15,6 +15,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import java.util.NoSuchElementException;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.IncorrectCommand;
@@ -73,22 +74,31 @@ public class AddCommandParser {
             if (startdate != null && enddate == null) {
                 enddate = startdate;
             }
+            
             //default block whole day
             if (starttime == null && endtime == null) {
                 starttime = DEFAULT_START_TIME;
                 endtime = DEFAULT_END_TIME;
             }
+            
             //default block to end of day
             if (starttime != null && endtime == null) {
                 endtime = DEFAULT_END_TIME;
             }
+            
             //default block from start of day
             if (endtime != null && starttime == null) {
                 starttime = DEFAULT_START_TIME;
             }
-            
+
+            //default task bytime if bydate is given
             if (bydate != null && bytime == null) {
-            	bytime = DEFAULT_BY_TIME;
+                bytime = DEFAULT_BY_TIME;
+            }
+            
+            //default bydate if bytime is given
+            if (bytime != null && bydate == null) {
+                bydate = StringUtil.getTodayDateInString();
             }
 
             return new AddCommand(
