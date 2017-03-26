@@ -86,6 +86,5 @@ public class XmlAdaptedTask {
         final boolean status = this.status;
 
         return new Task(description, priority, byTime, byDate, location, tags, status);
-
     }
 }

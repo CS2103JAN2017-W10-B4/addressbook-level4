@@ -91,19 +91,6 @@ public class ModelManager extends ComponentManager implements Model {
     }
     
     //@@author A0121668A
-    
-//<<<<<<< Updated upstream
-//=======
-//    @Override
-//    public synchronized void MarkTaskAsComplete(int filteredTaskListIndex) throws TaskNotFoundException {
-//        int addressBookIndex = filteredTasks.getSourceIndex(filteredTaskListIndex);
-//        whatsLeft.completeTask(addressBookIndex);
-//        updateFilteredListToShowAll();
-//        indicateWhatsLeftChanged();
-//    }
-//    //@@author
-//    
-//>>>>>>> Stashed changes
     @Override
     public synchronized void MarkTaskAsComplete(int filteredTaskListIndex) throws TaskNotFoundException {
         int addressBookIndex = filteredTasks.getSourceIndex(filteredTaskListIndex);
