@@ -21,9 +21,9 @@ We are a team based in the [School of Computing, National University of Singapor
 * Other major contributions:
   * Refactored original AddressBook to current WhatsLeft
   * Refactored Person to Activity
-  * Morphing UI package and Test package
+  * Morphed UI package and Test package
   * Maintainer of [Model](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#24-model-component) component
-  * Writing GUI tests for basic features
+  * Wrote GUI tests for basic features
 
 -----
 
@@ -43,7 +43,7 @@ We are a team based in the [School of Computing, National University of Singapor
 * Other major contributions:
   * Refactored UI package
   * Implemented UI layout
-  * Writing GUI test for calendar
+  * Wrote GUI test for calendar
 
 
 -----
@@ -86,7 +86,7 @@ We are a team based in the [School of Computing, National University of Singapor
   * Fixed GUI testing
   * Added start-end constraint for Event
   * [Issue tracking](https://github.com/CS2103JAN2017-W10-B4/main/issues?q=is%3Aissue+is%3Aclosed)
-  * Writing GUI test for basic features
+  * Wrote GUI test for basic features
 
  -----
 
