@@ -87,12 +87,12 @@ Given below is a quick overview of each component.
 > Tip: The `.pptx` files used to create diagrams in this document can be found in the [diagrams](diagrams/) folder.
 > To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
 
-`Main` has only one class called [`MainApp`](../src/main/java/seedu/address/MainApp.java). It is responsible for,
+`Main` has only one class called [`MainApp`](../src/main/java/seedu/whatsleft/MainApp.java). It is responsible for,
 
 * At app launch: Initializes the components in the correct sequence, and connects them up with each other.
 * At shut down: Shuts down the components and invokes cleanup method where necessary.
 
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
+[**`Commons`**](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#26-common-classes) represents a collection of classes used by multiple other components.
 Two of those classes play important roles at the architecture level.
 
 * `EventsCenter` : This class (written using [Google's Event Bus library](https://github.com/google/guava/wiki/EventBusExplained))
@@ -101,10 +101,10 @@ Two of those classes play important roles at the architecture level.
 
 The rest of the App consists of four components.
 
-* [**`UI`**](#ui-component) : The UI of the App.
-* [**`Logic`**](#logic-component) : The command executor.
-* [**`Model`**](#model-component) : Holds the data of the App in-memory.
-* [**`Storage`**](#storage-component) : Reads data from, and writes data to, the hard disk.
+* [**`UI`**](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#22-ui-component) : The UI of the App.
+* [**`Logic`**](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#23-logic-component) : The command executor.
+* [**`Model`**](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#24-model-component) : Holds the data of the App in-memory.
+* [**`Storage`**](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#25-storage-component) : Reads data from, and writes data to, the hard disk.
 
 Each of the four components
 
@@ -185,7 +185,7 @@ _Figure 2.3.1 : Structure of the Logic Component_
 
 * `Logic` uses the `Parser` class to parse the user command.
 * This results in a `Command` object which is executed by the `LogicManager`.
-* The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
+* The command execution can affect the `Model` (e.g. adding a activity) and/or raise events.
 * The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 
 Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete ev 1")`
@@ -237,7 +237,7 @@ We are using `java.util.logging` package for logging. The `LogsCenter` class is 
 and logging destinations.
 
 * The logging level can be controlled using the `logLevel` setting in the configuration file
-  (See [Configuration](#configuration))
+  (See [Configuration](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#32-configuration))
 * The `Logger` for a class can be obtained using `LogsCenter.getLogger(Class)` which will log messages according to
   the specified logging level
 * Currently log messages are output through: `Console` and to a `.log` file.
@@ -365,10 +365,10 @@ Priorities:
 Priority | As a ... | I want to ... | So that I can...
 -------- | :-------- | :--------- | :-----------
 `* * *` | new user | view all available commands | refer to them when I do not know how to use the App
-`* * *` | user | add a new [event](#Event)/[task](#Task) | keep track of it
+`* * *` | user | add a new event/task | keep track of it
 `* * *` | user | edit chosen event/task | update relevant details
 `* * *` | user | delete chosen event/task | mark it as cancelled
-`* * *` | user | delete all events/tasks | reset my WhatsLeft
+`* * *` | user | clear all events/tasks | reset my WhatsLeft
 `* * *` | user | view a sorted all list of events/tasks | know all activities saved in WhatsLeft
 `* * *` | user | view all finished events/tasks | keep track of my progress in event/task completion
 `* * *` | user | view all pending events/tasks | keep track of all incoming activities
@@ -378,10 +378,10 @@ Priority | As a ... | I want to ... | So that I can...
 `* * *` | user | save the storage file to designated folder, e.g. dropbox sync folder | access WhatsLeft from multiple devices
 `* * *` | user | load WhatsLeft content from designated folder, e.g. dropbox sync folder | access my WhatsLeft from multiple devices
 `* * *` | user | search for event/task by keywords in description | find out details on specific event/task
-`* *` | user | set up recurring event | save time setting them up every day/week/month
+`* *` | user | set up recurring event | save time setting them up every day/week
 `* *` | user | get a warning message when adding a clashing event | get aware of all possible clashes
 `* *` | user | add tags to my event/task | put in details that I might want to remember
-`*` | user | see the overview of events and deadlines in calendar format | see how busy the month will be for me
+`*` | user | see the overview of events and deadlines in calendar format | see how busy the week will be for me
 `*` | user | schedule events/tasks based on day ("this wed, next tue") without knowing the date | add events quickly
 `*` | user | change the status of a task from completed back to pending | redo the task
 
@@ -404,7 +404,7 @@ Use case ends.
 > WhatsLeft shows error message and suggests correct format <br>
   Use case ends
 
-1b. There is a same [activity](#Activity) in WhatsLeft already.
+1b. There is a same [activity](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/DeveloperGuide.md#activity) in WhatsLeft already.
 
 > WhatsLeft shows an error message of duplicate activities <br>
     Use case ends
@@ -419,12 +419,12 @@ Use case ends.
 > WhatsLeft shows a warning message of possible clash<br>
     Use case resumes at step 2
 
-#### Use case: Edit an existing event/deadline/task
+#### Use case: Edit an existing event/task
 
 **MSS**
 
-1. User requests to list all events/tasks
-2. WhatsLeft shows user the list of all events/tasks
+1. User requests to list all event and tasks
+2. WhatsLeft shows user the list of all events and tasks
 3. User requests to edit a specific event/task
 4. WhatsLeft updates the specified event/task
 Use case ends.
@@ -443,8 +443,8 @@ Use case ends.
 #### Use case: Delete an event/task
 **MSS**
 
-1. User requests to list all events/tasks
-2. WhatsLeft shows user the list of all events/tasks
+1. User requests to list all events and tasks
+2. WhatsLeft shows user the list of all events and tasks
 3. User requests to delete a specific event/task
 4. WhatsLeft deletes the specified event/task
 Use case ends.
@@ -464,8 +464,8 @@ Use case ends.
 
 **MSS**
 
-1. User requests to list all tasks
-2. WhatsLeft shows user the list of all tasks
+1. User requests to list all tasks and events
+2. WhatsLeft shows user the list of all tasks and events
 3. User requests to finish a specific task
 4. WhatsLeft archives the specified task
 Use case ends.
@@ -486,7 +486,7 @@ Use case ends.
 **MSS**
 
 1. User requests to list all events and tasks
-2. WhatsLeft shows user the list of all events/tasks
+2. WhatsLeft shows user the list of all events and tasks
 3. User requests to select a specific event/task
 4. WhatsLeft shows all Information of the specific event/task
 
@@ -528,8 +528,6 @@ Use case ends.
    should be able to accomplish most of the tasks faster using commands than using the mouse.
 4. Response time of 1s for each operation.
 
-{More to be added}
-
 ## Appendix D : Glossary
 
 ##### Mainstream OS
@@ -554,7 +552,7 @@ Use case ends.
 
 ##### Mutating Operation
 
-> Refers to the following operations: `add`, `edit`, `delete`, `finish`, `redo` and `clear`. These commands mutate the event/task list.
+> Refers to the following operations: `add`, `edit`, `delete`, `finish`, `redo`, `recur` and `clear`. These commands mutate the event/task list.
 
 
 ## Appendix E : Product Survey
