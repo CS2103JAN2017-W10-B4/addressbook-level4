@@ -29,7 +29,7 @@ public class StorageManagerTest {
 
     @Before
     public void setUp() {
-        storageManager = new StorageManager(getTempFilePath("ab"), getTempFilePath("prefs"));
+        storageManager = new StorageManager(getTempFilePath("ab"), getTempFilePath("prefs"), getTempFilePath("config"));
     }
 
 
@@ -71,10 +71,11 @@ public class StorageManagerTest {
     }
 
     @Test
-    public void handleWhatsLeftChangedEvent_exceptionThrown_eventRaised() throws IOException {
+    public void handleWhatsLeftChangedEventExceptionThrownEventRaised() throws IOException {
         // Create a StorageManager while injecting a stub that  throws an exception when the save method is called
         Storage storage = new StorageManager(new XmlWhatsLeftStorageExceptionThrowingStub("dummy"),
-                                             new JsonUserPrefsStorage("dummy"));
+                                             new JsonUserPrefsStorage("dummy"),
+                                             new JsonUserConfigStorage("dummy"));
         EventsCollector eventCollector = new EventsCollector();
         storage.handleWhatsLeftChangedEvent(new WhatsLeftChangedEvent(new WhatsLeft()));
         assertTrue(eventCollector.get(0) instanceof DataSavingExceptionEvent);

@@ -18,8 +18,12 @@ public class StringUtil {
     //@@author  A0121668A
     public static final String TIME_FORMAT_CONSTRAINTS = "Time arguments can only be in this format: "
                             + "HHMM format, e.g. 1200";
-    public static final String DATE_FORMAT_CONSTRAINTS = "Date arguments can take only 6 digits, "
-                            + "and it should be in DDMMYY format (Day-Month-Year), e.g. 060417";
+    public static final String DATE_FORMAT_CONSTRAINTS =
+            "Date arguments can take only 6 digits, "
+            + "and it should be in DDMMYY format (Day-Month-Year), e.g. 060417\n"
+            + "today, tomorrow/tmr, monday/mon, tue/tues/tuesday, wed/weds/wednesday, thu/thurs/thursday,"
+            + " fri/friday, sat/saturday, sun/sunday, next, following are also acceptable\n"
+            + "Example: next fri\n";
     public static final int YEAR_CONVERSION_INDEX = 2000;
 
     public static final String DATE_VALIDATION_REGEX = "([0123][\\d])([01][\\d])([\\d][\\d])";
@@ -77,19 +81,6 @@ public class StringUtil {
         if (timeString == null) throw new DateTimeException(TIME_FORMAT_CONSTRAINTS);
         return LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HHmm"));
     }
-
-//    //@@author A0148038A
-//    /**
-//     * Parse a String argument into date format.
-//     * @param dateArg
-//     * @return date in localDate format
-//     * @throws IllegalValueException
-//     */
-//    public static LocalDate parseStringToDate(String dateString) throws IllegalValueException {
-//        //empty date
-//        if (dateString == null) throw new IllegalValueException(DATE_FORMAT_CONSTRAINTS);
-//        return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
-//    }
 
     //@@author A0121668A
     /**

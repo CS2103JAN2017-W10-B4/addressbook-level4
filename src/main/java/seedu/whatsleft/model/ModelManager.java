@@ -6,8 +6,10 @@ import java.util.logging.Logger;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import seedu.whatsleft.commons.core.ComponentManager;
+import seedu.whatsleft.commons.core.EventsCenter;
 import seedu.whatsleft.commons.core.LogsCenter;
 import seedu.whatsleft.commons.core.UnmodifiableObservableList;
+import seedu.whatsleft.commons.events.model.ShowStatusChangedEvent;
 import seedu.whatsleft.commons.events.model.WhatsLeftChangedEvent;
 import seedu.whatsleft.commons.exceptions.IllegalValueException;
 import seedu.whatsleft.commons.util.CollectionUtil;
@@ -21,8 +23,9 @@ import seedu.whatsleft.model.activity.UniqueEventList.EventNotFoundException;
 import seedu.whatsleft.model.activity.UniqueTaskList;
 import seedu.whatsleft.model.activity.UniqueTaskList.TaskNotFoundException;
 
+//@@author A0148038A
 /**
- * Represents the in-memory model of the address book data. All changes to any
+ * Represents the in-memory model of the WhatsLeft data. All changes to any
  * model should be synchronized.
  */
 public class ModelManager extends ComponentManager implements Model {
@@ -38,6 +41,7 @@ public class ModelManager extends ComponentManager implements Model {
     private static String previousCommand;
     private static WhatsLeft previousState;
     private static String displayStatus;
+
     //@@author A0121668A
     /**
      * Initializes a ModelManager with the given whatsLeft and userPrefs.
@@ -56,12 +60,12 @@ public class ModelManager extends ComponentManager implements Model {
         displayStatus = DISPLAY_STATUS_PENDING;
         updateFilteredListToShowAll();
     }
-    //@@author
+
+    //@@author A0148038A
     public ModelManager() {
         this(new WhatsLeft(), new UserPrefs());
     }
 
-    //@@author A0148038A
     @Override
     public void resetData(ReadOnlyWhatsLeft newData) {
         whatsLeft.resetData(newData);
@@ -80,7 +84,6 @@ public class ModelManager extends ComponentManager implements Model {
         indicateWhatsLeftChanged();
     }
 
-    //@@author
     @Override
     public ReadOnlyWhatsLeft getWhatsLeft() {
         return whatsLeft;
@@ -90,18 +93,24 @@ public class ModelManager extends ComponentManager implements Model {
     private void indicateWhatsLeftChanged() {
         raise(new WhatsLeftChangedEvent(whatsLeft));
     }
+    //@@author A0121668A
+    /** Raises an event to indicate the show status has changed */
+    private void indicateShowStatusChanged() {
+        EventsCenter.getInstance().post(new ShowStatusChangedEvent(getDisplayStatus()));
+    }
 
     @Override
     public void setDisplayStatus(String status) {
         displayStatus = status;
         updateFilteredListToShowAll();
+        indicateShowStatusChanged();
     }
 
     @Override
     public String getDisplayStatus() {
         return displayStatus;
     }
-
+    //@@author
     @Override
     public synchronized void deleteTask(ReadOnlyTask target) throws TaskNotFoundException {
         whatsLeft.removeTask(target);
@@ -128,9 +137,14 @@ public class ModelManager extends ComponentManager implements Model {
         updateFilteredListToShowAll();
         indicateWhatsLeftChanged();
     }
-    // @@author
 
     // @@author A0148038A
+    /**
+     * add an event to whatsleft
+     *
+     * @param an event to add
+     * @throws DuplicateEventException to prevent duplicate events
+     */
     @Override
     public synchronized void addEvent(Event event)
             throws UniqueEventList.DuplicateEventException {
@@ -139,6 +153,12 @@ public class ModelManager extends ComponentManager implements Model {
         indicateWhatsLeftChanged();
     }
 
+    /**
+     * add a task to whatsleft
+     *
+     * @param a task to add
+     * @throws DuplicateTaskException to prevent duplicate tasks
+     */
     @Override
     public synchronized void addTask(Task task) throws UniqueTaskList.DuplicateTaskException {
         whatsLeft.addTask(task);
@@ -146,6 +166,12 @@ public class ModelManager extends ComponentManager implements Model {
         indicateWhatsLeftChanged();
     }
 
+    /**
+     * update/edit an event in whatsleft
+     *
+     * @param an event to edit and an edited event
+     * @throws DuplicateEventException to prevent duplicate events
+     */
     @Override
     public void updateEvent(Event eventToEdit, Event editedEvent)
             throws UniqueEventList.DuplicateEventException {
@@ -155,6 +181,12 @@ public class ModelManager extends ComponentManager implements Model {
         indicateWhatsLeftChanged();
     }
 
+    /**
+     * update/edit a task in whatsleft
+     *
+     * @param a task to edit and an edited task
+     * @throws DuplicateTaskException to prevent duplicate tasks
+     */
     @Override
     public void updateTask(Task taskToEdit, Task editedTask)
             throws UniqueTaskList.DuplicateTaskException {
@@ -206,11 +238,13 @@ public class ModelManager extends ComponentManager implements Model {
         }
         return currIndex;
     }
-    //@@author
 
     // =========== Filtered List Accessors
 
     // @@author A0148038A
+    /**
+     * get a sorted list of events
+     */
     @Override
     public UnmodifiableObservableList<ReadOnlyEvent> getFilteredEventList() {
         SortedList<ReadOnlyEvent> sortedEvents = new SortedList<ReadOnlyEvent>(filteredEvents);
@@ -218,26 +252,15 @@ public class ModelManager extends ComponentManager implements Model {
         return new UnmodifiableObservableList<ReadOnlyEvent>(sortedEvents);
     }
 
+    /**
+     * get a sorte list of tasks
+     */
     @Override
     public UnmodifiableObservableList<ReadOnlyTask> getFilteredTaskList() {
         SortedList<ReadOnlyTask> sortedTasks = new SortedList<ReadOnlyTask>(filteredTasks);
         sortedTasks.setComparator(ReadOnlyTask.getComparator());
         return new UnmodifiableObservableList<ReadOnlyTask>(sortedTasks);
     }
-
-    // @Override
-    // public void updateFilteredListToShowIncomplete() {
-    // filteredTasks.setPredicate(new PredicateExpression(new
-    // StatusQualifier(false))::satisfies);
-    // filteredEvents.setPredicate(null);
-    // }
-
-    // @Override
-    // public void updateFilteredListToShowComplete() {
-    // filteredTasks.setPredicate(new PredicateExpression(new
-    // StatusQualifier(true))::satisfies);
-    // filteredEvents.setPredicate(null);
-    // }
 
     //@@author A0121668A
     @Override
@@ -264,6 +287,7 @@ public class ModelManager extends ComponentManager implements Model {
     public void updateFilteredTaskList(Set<String> keywords) {
         updateFilteredTaskList(new PredicateExpression(new NameQualifier(keywords, displayStatus)));
     }
+
     //@@author A0121668A
     private void updateFilteredTaskList(Expression expression) {
         filteredTasks.setPredicate(expression::satisfies);
@@ -277,10 +301,9 @@ public class ModelManager extends ComponentManager implements Model {
     private void updateFilteredEventList(Expression expression) {
         filteredEvents.setPredicate(expression::satisfies);
     }
-
-    // ========== Inner classes/interfaces used for filtering
-    // =================================================
     //@@author A0121668A
+    // ========== Inner classes/interfaces used for filtering =================================================
+
     interface Expression {
         boolean satisfies(ReadOnlyTask task);
 
@@ -320,6 +343,7 @@ public class ModelManager extends ComponentManager implements Model {
 
         String toString();
     }
+
     //@@author A0121668A
     private class NameQualifier implements Qualifier {
         private Set<String> nameKeyWords;
@@ -408,7 +432,7 @@ public class ModelManager extends ComponentManager implements Model {
                 return !event.isOver();
             }
         }
-        //@@author
+
         @Override
         public String toString() {
             return "status =" + String.valueOf(statusKey);

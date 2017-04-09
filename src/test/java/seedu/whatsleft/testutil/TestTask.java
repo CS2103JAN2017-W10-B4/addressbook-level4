@@ -1,8 +1,8 @@
 package seedu.whatsleft.testutil;
 
-//import java.time.LocalDate;
-//import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.whatsleft.model.activity.ByDate;
 import seedu.whatsleft.model.activity.ByTime;
@@ -25,10 +25,10 @@ public class TestTask implements ReadOnlyTask {
     private Location location;
     private UniqueTagList tags;
     private boolean status;
-    private boolean hasDeadline;
 
     public TestTask() {
         tags = new UniqueTagList();
+        status = false;
     }
 
     /**
@@ -42,7 +42,6 @@ public class TestTask implements ReadOnlyTask {
         this.location = taskToCopy.getLocation();
         this.tags = taskToCopy.getTags();
         this.status = taskToCopy.getStatus();
-        this.hasDeadline = taskToCopy.hasDeadline();
     }
 
     public void setDescription(Description description) {
@@ -67,6 +66,10 @@ public class TestTask implements ReadOnlyTask {
 
     public void setTags(UniqueTagList tags) {
         this.tags = tags;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override
@@ -106,7 +109,7 @@ public class TestTask implements ReadOnlyTask {
 
     @Override
     public boolean hasDeadline() {
-        return hasDeadline;
+        return (this.getByDate() != null || this.getByTime() != null);
     }
 
     @Override
@@ -125,21 +128,51 @@ public class TestTask implements ReadOnlyTask {
         return sb.toString();
     }
 
-    /*
-    //@@author
+    //@@author A0124377A
+    public String getEditCommand(int i) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("edit ts " + i + " ");
+        sb.append("bd/ " + this.getByDate().toString());
+        sb.append("bt/ " + this.getByTime().toString());
+        return sb.toString();
+    }
+
+    //@@author A0148038A
     @Override
-    public boolean isOver() {
-        if (LocalDate.now().isAfter(this.getByDate().getValue())) {
-            return true;
-        } else if (LocalDate.now().isBefore(this.getByDate().getValue())) {
-            return false;
+    public String getDescriptionToShow() {
+        return getDescription().toString();
+    }
+
+    @Override
+    public String getPriorityToShow() {
+        return "Priority: " + getPriority().toString().toUpperCase();
+    }
+
+    @Override
+    public String getByTimeDateToShow() {
+        if (hasDeadline()) {
+            return "BY " + this.byTime.toString() + " " + this.byDate.toString();
         } else {
-            if (LocalTime.now().isAfter(this.getByTime().getValue())) {
-                return true;
-            } else {
-                return false;
-            }
+            return null;
         }
     }
-    */
+
+    @Override
+    public String getLocationToShow() {
+        if (getLocation().toString() != null) {
+            return "@" + getLocation().toString();
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<String> getTagsToShow() {
+        return tags
+                .asObservableList()
+                .stream()
+                .map(tag -> tag.tagName)
+                .collect(Collectors.toList());
+    }
 }

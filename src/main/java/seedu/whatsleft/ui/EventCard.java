@@ -27,17 +27,19 @@ public class EventCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
+    //@@author A0124377A
     public EventCard(ReadOnlyEvent event, int displayedIndex) {
         super(FXML);
-        description.setText(event.getDescription().description);
+        description.setText(event.getDescriptionToShow());
         id.setText(displayedIndex + ". ");
 
-        duration.setText(event.getStartTime().toString()
-                + " " + event.getStartDate().toString()
-                + " ~ " + event.getEndTime().toString()
-                + " " + event.getEndDate().toString());
+        duration.setText(event.getDurationToShow());
 
-        locations.setText("@" + event.getLocation().toString());
+        if (event.getLocation() == null) {
+            locations.setText("");
+        } else {
+            locations.setText(event.getLocationToShow());
+        }
         initTags(event);
         setCardLook(event);
     }
@@ -46,7 +48,10 @@ public class EventCard extends UiPart<Region> {
         event.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
     //@@author A0124377A
-    //add badge to list card for certain statuses
+    /**
+     * Function to add badge to list card for respective statuses
+     * @param event
+     */
     private void setCardLook(ReadOnlyEvent event) {
         if (event.isOver()) {
             cardPane.getStyleClass().add("status-complete");
@@ -55,6 +60,10 @@ public class EventCard extends UiPart<Region> {
         }
     }
 
+    /**
+     * Determines if event is due at current day of local date time.
+     * @param event
+     */
     private boolean isDueToday(ReadOnlyEvent event) {
         LocalDateTime eventTime = LocalDateTime.of(event.getStartDate().getValue(),
                 event.getStartTime().getValue());

@@ -1,6 +1,7 @@
 package seedu.whatsleft.model.activity;
 
 import java.util.Comparator;
+import java.util.List;
 
 import seedu.whatsleft.model.tag.UniqueTagList;
 
@@ -17,6 +18,10 @@ public interface ReadOnlyEvent {
     StartDate getStartDate();
     EndDate getEndDate();
     Location getLocation();
+    String getDescriptionToShow();
+    String getDurationToShow();
+    String getLocationToShow();
+    List<String> getTagsToShow();
 
     /**
      * The returned TagList is a deep copy of the internal TagList,
@@ -67,6 +72,10 @@ public interface ReadOnlyEvent {
     }
 
     //@@author A0148038A
+    /**
+     * compare events by start date, start time, end date, end time
+     * @return a comparator of ReadOnlyEvent
+     */
     static Comparator<? super ReadOnlyEvent> getComparator() {
         // sort by start date first
         Comparator<ReadOnlyEvent> byStartDate = (e1, e2) -> e1.getStartDate().compareTo(e2.getStartDate());
@@ -82,6 +91,7 @@ public interface ReadOnlyEvent {
 
         return byStartDate.thenComparing(byStartTime).thenComparing(byEndDate).thenComparing(byEndTime);
     }
+
     //@@author A0121668A
     /**
      * Check with current date/time to see if the event is over.

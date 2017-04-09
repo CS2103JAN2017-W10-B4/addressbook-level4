@@ -14,7 +14,6 @@ import seedu.whatsleft.commons.exceptions.DataConversionException;
 import seedu.whatsleft.logic.commands.exceptions.CommandException;
 import seedu.whatsleft.model.ReadOnlyWhatsLeft;
 import seedu.whatsleft.model.WhatsLeft;
-import seedu.whatsleft.storage.JsonUserConfigStorage;
 import seedu.whatsleft.storage.Storage;
 
 //@@author A0121668A
@@ -27,10 +26,10 @@ public class ReadCommand extends Command {
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
     public static final String COMMAND_WORD = "read";
-    public static final Object MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD
             + ":  Reads the WhatsLeft task storage from given location filepath.\n" + "Parameters: FILEPATH\n"
-            + "Example: " + COMMAND_WORD + " C:/Users/Downloads/Desktop/CS2103" + " 1\n" + "Example: " + COMMAND_WORD
-            + " /Users/Andy/Downloads";
+            + "Example (Relative Path): " + COMMAND_WORD + " ./Data/WhatsLeft.xml" + " \n"
+            + "Example (Absolute Path): " + COMMAND_WORD + " /Users/Andy/Downloads/WhatsLeft.xml";
 
     public static final String MESSAGE_READ_WHATSLEFT_SUCCESS = "Successfully read WhatsLeft from: %1$s";
     private static final String MESSAGE_SAVE_CONFIG_ERROR = "Failed to read stored WhatsLeft tasklist";
@@ -40,11 +39,9 @@ public class ReadCommand extends Command {
     private String newFilePath;
     private static Config config;
     private static Storage storage;
-    private static JsonUserConfigStorage jsonUserConfigStorage;
 
     public ReadCommand(String filePath) {
         this.newFilePath = filePath;
-        jsonUserConfigStorage = new JsonUserConfigStorage(Config.DEFAULT_CONFIG_FILE);
     }
 
     public static void setStorage(Storage storageToSet) {
@@ -58,9 +55,8 @@ public class ReadCommand extends Command {
     @Override
     public CommandResult execute() throws CommandException {
         try {
-            String fileToRead = newFilePath + "/whatsleft.xml";
-            Optional<ReadOnlyWhatsLeft> whatsleftToRead = storage.readWhatsLeft(fileToRead);
-            config.setWhatsLeftFilePath(fileToRead);
+            Optional<ReadOnlyWhatsLeft> whatsleftToRead = storage.readWhatsLeft(newFilePath);
+            config.setWhatsLeftFilePath(newFilePath);
             saveConfig();
             indicateConfigChanged();
             resetWhatsLeft(whatsleftToRead);
@@ -102,7 +98,7 @@ public class ReadCommand extends Command {
      */
     private void saveConfig() throws CommandException {
         try {
-            jsonUserConfigStorage.saveUserConfig(config);
+            storage.saveUserConfig(config);
         } catch (IOException e) {
             throw new CommandException(MESSAGE_SAVE_CONFIG_ERROR);
         }

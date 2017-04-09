@@ -15,7 +15,11 @@ import seedu.whatsleft.commons.util.StringUtil;
 public class EndDate {
 
     public static final String MESSAGE_ENDDATE_CONSTRAINTS =
-            "Event End Date can take only 6 digits, and it should be in DDMMYY format (Day-Month-Year)";
+            "Event End Date can take only 6 digits, and it should be in DDMMYY format (Day-Month-Year)\n"
+            + "today, tomorrow/tmr, monday/mon, tue/tues/tuesday, wed/weds/wednesday, thu/thurs/thursday,"
+            + " fri/friday, sat/saturday, sun/sunday, next, following are also acceptable\n"
+            + "Example: next fri\n"
+            + "Example: 250317\n";
 
     public final LocalDate value;
     //@@author A0110491U
@@ -89,6 +93,13 @@ public class EndDate {
         return value.hashCode();
     }
 
+    //@@author A0148038A
+    /**
+     * Compare with another EndDate object
+     *
+     * @param a EndDate object
+     * @return -1 if this EndDate object is earlier than the given EndDate object
+     */
     public int compareTo(EndDate o) {
         return this.getValue().compareTo(o.getValue());
     }

@@ -1,7 +1,9 @@
 package seedu.whatsleft.logic.commands;
 
+import seedu.whatsleft.commons.core.EventsCenter;
 import seedu.whatsleft.commons.core.Messages;
 import seedu.whatsleft.commons.core.UnmodifiableObservableList;
+import seedu.whatsleft.commons.events.ui.JumpToTaskListRequestEvent;
 import seedu.whatsleft.logic.commands.exceptions.CommandException;
 import seedu.whatsleft.model.ModelManager;
 import seedu.whatsleft.model.ReadOnlyWhatsLeft;
@@ -10,7 +12,7 @@ import seedu.whatsleft.model.activity.UniqueTaskList.TaskNotFoundException;
 
 //@@author A0121668A
 /**
- * Mark a Task as complete
+ * Mark a Task as incomplete
  */
 public class RedoCommand extends Command {
 
@@ -44,6 +46,10 @@ public class RedoCommand extends Command {
             model.markTaskAsPending(taskToRedo);
         } catch (TaskNotFoundException pnfe) {
             assert false : "The target task cannot be missing";
+        }
+
+        if (model.getDisplayStatus() == "ALL") {
+            EventsCenter.getInstance().post(new JumpToTaskListRequestEvent(filteredActivityListIndex - 1));
         }
         model.storePreviousCommand("redo");
         return new CommandResult(String.format(MESSAGE_REDO_TASK_SUCCESS, taskToRedo));

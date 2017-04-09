@@ -3,6 +3,8 @@ package seedu.whatsleft.testutil;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.whatsleft.model.activity.Description;
 import seedu.whatsleft.model.activity.EndDate;
@@ -115,15 +117,27 @@ public class TestEvent implements ReadOnlyEvent {
     //@@author A0110491U
     public String getAddCommand() {
         StringBuilder sb = new StringBuilder();
-        sb.append("add " + this.getDescription().description + " ");
-        sb.append("st/" + this.getStartTime().getValue().format(DateTimeFormatter.ofPattern("HHmm")));
-        sb.append("sd/" + this.getStartDate().getValue().format(DateTimeFormatter.ofPattern("ddMMyy")));
-        sb.append("et/" + this.getEndTime().getValue().format(DateTimeFormatter.ofPattern("HHmm")));
-        sb.append("ed/" + this.getEndDate().getValue().format(DateTimeFormatter.ofPattern("ddMMyy")));
-        sb.append("l/" + this.getLocation().value + " ");
-        this.getTags().asObservableList().stream().forEach(s -> sb.append("ta/" + s.tagName + " "));
+        sb.append("add " + this.getDescription().description);
+        sb.append(" st/" + this.getStartTime().getValue().format(DateTimeFormatter.ofPattern("HHmm")));
+        sb.append(" sd/" + this.getStartDate().getValue().format(DateTimeFormatter.ofPattern("ddMMyy")));
+        sb.append(" et/" + this.getEndTime().getValue().format(DateTimeFormatter.ofPattern("HHmm")));
+        sb.append(" ed/" + this.getEndDate().getValue().format(DateTimeFormatter.ofPattern("ddMMyy")));
+        sb.append(" l/" + this.getLocation().value);
+        this.getTags().asObservableList().stream().forEach(s -> sb.append(" ta/" + s.tagName + " "));
         return sb.toString();
     }
+
+    //@@author A0124377A
+    public String getEditCommand(int i) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("edit ev " + i + " ");
+        sb.append("st/ " + this.getStartDate().toString());
+        sb.append("et/ " + this.getEndTime().toString());
+        sb.append("sd/ " + this.getStartDate().toString());
+        sb.append("ed/ " + this.getEndTime().toString());
+        return sb.toString();
+    }
+
 
     //@@author
     @Override
@@ -139,5 +153,35 @@ public class TestEvent implements ReadOnlyEvent {
                 return false;
             }
         }
+    }
+
+    //@@author A0148038A
+    @Override
+    public String getDescriptionToShow() {
+        return getDescription().toString();
+    }
+
+    @Override
+    public String getDurationToShow() {
+        return getStartTime().toString() + " " + getStartDate().toString()
+               +  " ~ " + getEndTime().toString() + " " + getEndDate().toString();
+    }
+
+    @Override
+    public String getLocationToShow() {
+        if (getLocation().toString() != null) {
+            return "@" + getLocation().toString();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> getTagsToShow() {
+        return tags
+                .asObservableList()
+                .stream()
+                .map(tag -> tag.tagName)
+                .collect(Collectors.toList());
     }
 }

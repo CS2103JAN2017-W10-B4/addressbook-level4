@@ -3,24 +3,25 @@ package seedu.whatsleft.logic.commands;
 import seedu.whatsleft.commons.core.EventsCenter;
 import seedu.whatsleft.commons.core.Messages;
 import seedu.whatsleft.commons.events.model.ShowStatusChangedEvent;
+import seedu.whatsleft.commons.events.ui.JumpToEventListRequestEvent;
+import seedu.whatsleft.commons.events.ui.JumpToTaskListRequestEvent;
 import seedu.whatsleft.logic.commands.exceptions.CommandException;
-
 
 //@@author A0121668A
 
 /**
  * Updates the display preference of tasks in WhatsLeft.
  */
-
 public class ShowCommand extends Command {
 
     public static final String COMMAND_WORD = "show";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": changes the current display status preference "
-            + "to show completed, pending or all tasks "
-            + "Parameters: STATUS PREFERENCE (com shows complete tasks, pend shows pending tasks, all shows all tasks"
-            + "[com/pend/all]"
-            + "Example: " + COMMAND_WORD + " com";
+            + "(reflected on the bottom right status bar) "
+            + "    Parameters: STATUS PREFERENCE ([com/pend])" + "\n"
+            + "Example: " + COMMAND_WORD + " (show all tasks and events)" + "\n"
+            + "Example: " + COMMAND_WORD + " com (show completed tasks and past events)" + "\n"
+            + "Example: " + COMMAND_WORD + " pend (show pending tasks and future events)";
 
     public static final String MESSAGE_DISPLAY_PREFERENCE_SUCCESS = "Successfully changed display"
             + " preference to show [%1$s] tasks";
@@ -47,13 +48,15 @@ public class ShowCommand extends Command {
         }
         model.setDisplayStatus(preference);
         model.updateFilteredListToShowAll();
-        indicateShowStatusChanged();
+        postToEventCenter();
         return new CommandResult(String.format(MESSAGE_DISPLAY_PREFERENCE_SUCCESS, preference));
     }
-
-    private void indicateShowStatusChanged() {
+    /**
+     * Post change to EventsCenter to update UI
+     */
+    private void postToEventCenter() {
+        EventsCenter.getInstance().post(new JumpToEventListRequestEvent(0));
+        EventsCenter.getInstance().post(new JumpToTaskListRequestEvent(0));
         EventsCenter.getInstance().post(new ShowStatusChangedEvent(model.getDisplayStatus()));
     }
-
-    //@@author
 }

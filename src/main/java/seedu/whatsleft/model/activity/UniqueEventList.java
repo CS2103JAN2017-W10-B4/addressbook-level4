@@ -42,7 +42,7 @@ public class UniqueEventList implements Iterable<Event> {
 
     //@@author A0110491U
     /**
-     *
+     * Checks whether there is a clashing event
      * @param toCheck
      * @return true if the list contains an event that clashes in time with the given argument
      */
@@ -85,8 +85,8 @@ public class UniqueEventList implements Iterable<Event> {
     /**
      * Updates an event in WhatsLeft.
      *
+     * @param an event to edit and an edited event
      * @throws DuplicateEventException if the edited event is a duplicate of an existing event in the list.
-     * @throws DuplicateTimeClashException if the edited event clashes with any other event
      */
     public void updateEvent(Event eventToEdit, Event editedEvent) throws UniqueEventList.
         DuplicateEventException {
@@ -147,6 +147,7 @@ public class UniqueEventList implements Iterable<Event> {
     public int hashCode() {
         return internalList.hashCode();
     }
+    //@@author
 
     /**
      * Signals that an operation would have violated the 'no duplicates' property of the list.

@@ -2,7 +2,9 @@ package seedu.whatsleft.model.activity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import seedu.whatsleft.commons.exceptions.IllegalValueException;
 import seedu.whatsleft.commons.util.CollectionUtil;
@@ -24,7 +26,9 @@ public class Event implements ReadOnlyEvent {
     private UniqueTagList tags;
 
     /**
+     * Create an event in WhatsLeft
      * Description and start date must be present and not null.
+     * @param Description, StartTime, StartDate, EndTime, EndDate, Location, UniqueTagList
      * @throws IllegalValueException
      */
     public Event(Description description, StartTime startTime, StartDate startDate,
@@ -32,7 +36,6 @@ public class Event implements ReadOnlyEvent {
 
         //check description and start date are present
         assert !CollectionUtil.isAnyNull(description, startDate);
-        assert isValideEndDateTime(endTime, endDate, startTime, startDate);
 
         this.description = description;
         this.startTime = startTime;
@@ -45,7 +48,6 @@ public class Event implements ReadOnlyEvent {
 
     /**
      * Creates a copy of the given ReadOnlyEvent.
-     * @throws IllegalValueException
      */
     public Event(ReadOnlyEvent source) {
         this(source.getDescription(), source.getStartTime(), source.getStartDate(),
@@ -117,7 +119,7 @@ public class Event implements ReadOnlyEvent {
     /**
      * Checks if start Date/Time is before end Date/Time
      */
-    public static boolean isValideEndDateTime(EndTime et, EndDate ed, StartTime st, StartDate sd) {
+    public static boolean isValidEndDateTime(EndTime et, EndDate ed, StartTime st, StartDate sd) {
         if (sd.getValue().isAfter(ed.getValue())) {
             return false;
         }
@@ -127,7 +129,7 @@ public class Event implements ReadOnlyEvent {
         return true;
     }
 
-    //@@author A0121668A
+    //@@author
     /**
      * Replaces this event's tags with the tags in the argument tag list.
      */
@@ -180,8 +182,58 @@ public class Event implements ReadOnlyEvent {
         return Objects.hash(description, startTime, startDate, endTime, endDate, location, tags);
     }
 
+    //@@author A0148038A
     @Override
     public String toString() {
         return getAsText();
+    }
+
+    /**
+     * get description shown in the card in event list panel
+     *
+     * @return a string that represents description of the event
+     */
+    @Override
+    public String getDescriptionToShow() {
+        return getDescription().toString();
+    }
+
+    /**
+     * get duration shown in the card in event list panel
+     *
+     * @return a string that represents duration of the event
+     */
+    @Override
+    public String getDurationToShow() {
+        return getStartTime().toString() + " " + getStartDate().toString()
+               +  " ~ " + getEndTime().toString() + " " + getEndDate().toString();
+    }
+
+    /**
+     * get location shown in the card in event list panel
+     *
+     * @return a string that represents location of the event
+     */
+    @Override
+    public String getLocationToShow() {
+        if (getLocation().toString() != null) {
+            return "@" + getLocation().toString();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * get tags shown in the card in event list panel
+     *
+     * @return a list of strings that represents tags of the event
+     */
+    @Override
+    public List<String> getTagsToShow() {
+        return tags
+                .asObservableList()
+                .stream()
+                .map(tag -> tag.tagName)
+                .collect(Collectors.toList());
     }
 }

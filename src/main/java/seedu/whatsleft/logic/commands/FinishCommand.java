@@ -1,7 +1,9 @@
 package seedu.whatsleft.logic.commands;
 
+import seedu.whatsleft.commons.core.EventsCenter;
 import seedu.whatsleft.commons.core.Messages;
 import seedu.whatsleft.commons.core.UnmodifiableObservableList;
+import seedu.whatsleft.commons.events.ui.JumpToTaskListRequestEvent;
 import seedu.whatsleft.logic.commands.exceptions.CommandException;
 import seedu.whatsleft.model.ModelManager;
 import seedu.whatsleft.model.ReadOnlyWhatsLeft;
@@ -17,7 +19,7 @@ public class FinishCommand extends Command {
     public static final String COMMAND_WORD = "finish";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": mark the task identified by index number used in the last respective listing.\n"
+            + ": mark the task identified by index number as completed.\n"
             + "Parameters: INDEX (must be a positive integer)\n" + "Example: " + COMMAND_WORD + " 5";
 
     public static final String MESSAGE_FINISH_TASK_SUCCESS = "Finished task: %1$s";
@@ -45,8 +47,11 @@ public class FinishCommand extends Command {
         } catch (TaskNotFoundException pnfe) {
             assert false : "The target task cannot be missing";
         }
+
+        if (model.getDisplayStatus() == "ALL") {
+            EventsCenter.getInstance().post(new JumpToTaskListRequestEvent(filteredActivityListIndex - 1));
+        }
         model.storePreviousCommand("finish");
         return new CommandResult(String.format(MESSAGE_FINISH_TASK_SUCCESS, taskToComplete));
     }
-    //@@author
 }

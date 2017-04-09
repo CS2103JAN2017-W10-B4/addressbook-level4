@@ -8,7 +8,6 @@ import seedu.whatsleft.commons.core.Messages;
 import seedu.whatsleft.commons.events.model.ConfigChangedEvent;
 import seedu.whatsleft.logic.commands.exceptions.CommandException;
 import seedu.whatsleft.model.ReadOnlyWhatsLeft;
-import seedu.whatsleft.storage.JsonUserConfigStorage;
 import seedu.whatsleft.storage.Storage;
 
 //@@author A0121668A
@@ -19,10 +18,10 @@ import seedu.whatsleft.storage.Storage;
 public class SaveCommand extends Command {
 
     public static final String COMMAND_WORD = "save";
-    public static final Object MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD
             + ":  Saves the current WhatsLeft location to the given filepath.\n" + "Parameters: FILEPATH\n"
-            + "Example: " + COMMAND_WORD + " C:/Users/Downloads/Desktop/CS2103" + " 1\n" + "Example: " + COMMAND_WORD
-            + " /Users/Andy/Downloads";
+            + "Example (Relative Path): " + COMMAND_WORD + " ./Data/WhatsLeft.xml" + " \n"
+            + "Example (Absolute Path): " + COMMAND_WORD + " /Users/Andy/Downloads/WhatsLeft.xml";
 
     public static final String MESSAGE_CHANGE_FILEPATH_SUCCESS = "Saved WhatsLeft to: %1$s";
     private static final String MESSAGE_SAVE_CONFIG_ERROR = "Failed to save configuration file";
@@ -30,11 +29,9 @@ public class SaveCommand extends Command {
     private String newFilePath;
     private static Config config;
     private static Storage storage;
-    private static JsonUserConfigStorage jsonUserConfigStorage;
 
     public SaveCommand(String filePath) {
         this.newFilePath = filePath;
-        jsonUserConfigStorage = new JsonUserConfigStorage(Config.DEFAULT_CONFIG_FILE);
     }
 
     public static void setStorage(Storage storageToSet) {
@@ -49,9 +46,8 @@ public class SaveCommand extends Command {
     public CommandResult execute() throws CommandException {
         ReadOnlyWhatsLeft whatsLeftToSave = model.getWhatsLeft();
         try {
-            String fileToSave = newFilePath + "/whatsleft.xml";
-            storage.saveWhatsLeft(whatsLeftToSave, fileToSave);
-            config.setWhatsLeftFilePath(fileToSave);
+            storage.saveWhatsLeft(whatsLeftToSave, newFilePath);
+            config.setWhatsLeftFilePath(newFilePath);
             saveConfig();
             indicateConfigChanged();
         } catch (IOException e) {
@@ -66,7 +62,7 @@ public class SaveCommand extends Command {
 
     private void saveConfig() throws CommandException {
         try {
-            jsonUserConfigStorage.saveUserConfig(config);
+            storage.saveUserConfig(config);
         } catch (IOException e) {
             throw new CommandException(MESSAGE_SAVE_CONFIG_ERROR);
         }
