@@ -123,7 +123,7 @@ Expected result : Successfully changed display preference to show [PENDING] task
 
 Expected result : recur: make an event a recurring one. <br>
 Parameters: INDEX (must be a positive integer) FREQUENCY (daily or weekly) NUMBER OF TIMES (must be a positive integer) <br>
-Example: recur 5 daily 3 <br>
+[recur 5 daily 3] <br>
 
 
 ### 17. Recur <br>
