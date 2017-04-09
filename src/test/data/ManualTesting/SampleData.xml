@@ -358,25 +358,25 @@
     <events>
         <description>BSP4515 Seminar Wk 13</description>
         <startTime>11:00</startTime>
-        <startDate>2017-04-10</startDate>
+        <startDate>2017-04-13</startDate>
         <endTime>14:00</endTime>
-        <endDate>2017-04-10</endDate>
+        <endDate>2017-04-13</endDate>
         <location>Biz</location>
         <tagged>presentation</tagged>
     </events>
     <events>
         <description>CS2105 Tutorial Wk 13</description>
-        <startTime>11:00</startTime>
-        <startDate>2017-04-11</startDate>
-        <endTime>12:00</endTime>
-        <endDate>2017-04-11</endDate>
+        <startTime>15:00</startTime>
+        <startDate>2017-04-12</startDate>
+        <endTime>16:00</endTime>
+        <endDate>2017-04-12</endDate>
         <location>SOC</location>
     </events>
     <events>
         <description>CS2103 Tutorial Wk 13</description>
-        <startTime>10:00</startTime>
+        <startTime>11:00</startTime>
         <startDate>2017-04-12</startDate>
-        <endTime>11:00</endTime>
+        <endTime>12:00</endTime>
         <endDate>2017-04-12</endDate>
         <location>COM1-B103</location>
         <tagged>done</tagged>
@@ -416,10 +416,10 @@
     </events>
     <events>
         <description>meet with Ms Glenna</description>
-        <startTime>13:00</startTime>
-        <startDate>2017-04-11</startDate>
-        <endTime>14:00</endTime>
-        <endDate>2017-04-11</endDate>
+        <startTime>15:00</startTime>
+        <startDate>2017-04-13</startDate>
+        <endTime>15:30</endTime>
+        <endDate>2017-04-13</endDate>
         <location>ICBC Standard Bank</location>
     </events>
     <events>
@@ -428,6 +428,14 @@
         <startDate>2017-04-12</startDate>
         <endTime>19:00</endTime>
         <endDate>2017-04-12</endDate>
+    </events>
+    <events>
+        <description>Job Interview</description>
+        <startTime>15:00</startTime>
+        <startDate>2017-04-14</startDate>
+        <endTime>16:00</endTime>
+        <endDate>2017-04-14</endDate>
+        <location>town</location>
     </events>
     <tags>webcasted</tags>
     <tags>V04</tags>
