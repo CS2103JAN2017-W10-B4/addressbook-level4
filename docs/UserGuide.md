@@ -4,10 +4,10 @@ By : `Team CS2103JAN2017-W10-B4`  &nbsp;&nbsp;&nbsp;&nbsp; Since: `Feb 2017`  &n
 
 ---
 
-1. [Quick Start](#quick-start)
-2. [Features](#features)
-3. [FAQ](#faq)
-4. [Command Summary](#command-summary)
+1. [Quick Start](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#1-quick-start)
+2. [Features](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#2-features)
+3. [FAQ](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#3-faq)
+4. [Command Summary](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#4-command-summary)
 
 ## 1. Quick Start
 
@@ -29,7 +29,10 @@ By : `Team CS2103JAN2017-W10-B4`  &nbsp;&nbsp;&nbsp;&nbsp; Since: `Feb 2017`  &n
      adds a floating task with description read CS2103 handout and priority high to WhatsLeft.
    * **`delete ev`**` 3` : deletes the 3rd event shown in the current event list.
    * **`exit`** : exits the app.
-6. Refer to the [Features](#features) section below for details of each command.<br>
+6. Refer to the [Features](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#2-features) section below for details of each command.<br>
+7. There are 3 modes to WhatsLeft, indicated at the bottom right of the application window. The default mode is to show pending activities. <br>
+   Other modes are covered in [2.10](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#210-task-display-preference-show).
+
 
 
 ## 2. Features
@@ -40,6 +43,7 @@ By : `Team CS2103JAN2017-W10-B4`  &nbsp;&nbsp;&nbsp;&nbsp; Since: `Feb 2017`  &n
 > * Items in `SQUARE_BRACKETS` are optional.
 > * Items with `...` after them can have multiple instances.
 > * Parameters can be in any order.
+> * Commands are case insensitive.
 
 ### 2.1. Viewing help : `help`
 Shows help message.<br>
@@ -47,7 +51,7 @@ Format: `help [COMMAND]`
 
 > * `COMMAND` is optional.
 > * `COMMAND` should be `add`, `recur`, `list`, `edit`, `find`, `select`, `delete`, `clear`, `finish`, `redo`, `show`, `undo`, `save`, `read`, `next`, `refresh` or `exit`.
-> * When there is no command specified or incorrect command e.g.`abcd`, a help window with all commands will be shown.
+> * When no extra command is given, the help window will open. 
 > * When the command is specified, the format and examples of the command will be shown.
 
 ### 2.2. Adding an event or task : `add`
@@ -57,9 +61,9 @@ Format: `help [COMMAND]`
 Adds an event to the event list. Undoable.<br>
 Format: `add DESCRIPTION [st/START_TIME] sd/START_DATE [et/END_TIME] [ed/END_DATE] [l/LOCATION] [ta/TAG]...`
 
-> * Events must be added with `DESCRIPTION` and `START_DATE` is required, while other fields are optional.
+> * Events must be added with `DESCRIPTION` and `START_DATE`, while other fields are optional.
 > * `START_DATE` and `END_DATE` can be easily input with `today`, `tomorrow/tmr`, `monday/mon`, `tue/tues/tuesday`, `wed/weds/wednesday`, `thu/thurs/thursday`, `fri/friday`, `sat/saturday`, `sun/sunday`, `next` and `following` can be used in conjunction with the 7 days.
-> * Otherwise, Start date, and end date should have format `DDMMYY`, e.g. `230117`
+> * Otherwise, `START_DATE`, and `END_DATE` should have format `DDMMYY`, e.g. `230117`
 > * Start time and end time should have format `MMHH`, e.g. `2359`
 > * Default value for `END_DATE` is set to be the same as `START_DATE`
 > * Default value for `START_DATE` is set to be 00:01
@@ -78,7 +82,7 @@ Examples:
 
 #### 2.2.2. Adding a recurring event : `recur`
 
-Adds recurring instances of the same event. <br>
+Adds recurring instances of the same event. Undoable.<br>
 Format: `recur EVENT_INDEX FREQUENCY NUMBER_OF_TIMES`
 
 > * Event must be chosen from the list of existing events.
@@ -94,9 +98,9 @@ Examples:
 
 #### 2.2.3. Adding a task : `add`
 
-Adds a floating task or deadline to the task list. <br>
+Adds a floating task or deadline to the task list. Undoable.<br>
 Tasks have completion status, which is set to `pending` by default. <br>
-User can mark a task as `completed` with `finish` command. (See section 2.9) <br>
+User can mark a task as `completed` with `finish` command. (See [section 2.9](https://github.com/CS2103JAN2017-W10-B4/main/blob/master/docs/UserGuide.md#29-finishingredoing-a-task)) <br>
 Format: `add DESCRIPTION p/PRIORITY [bt/BY_TIME] [bd/BY_DATE] [l/LOCATION] [ta/TAG]...`
 
 > * Tasks must be added with `DESCRIPTION` and `PRIORITY`, other fields are optional.
@@ -108,7 +112,7 @@ Format: `add DESCRIPTION p/PRIORITY [bt/BY_TIME] [bd/BY_DATE] [l/LOCATION] [ta/T
 > * If only `BY_DATE` is specified, `BY_TIME` would be set as `23:59` by default.
 > * Tags can contain only one word without space.
 > * Tasks can have any number of tags (including 0).
-> * Tasks that have past the current date and time, or are happening today, will be marked with a badge.
+> * Tasks due today or are overdue will be marked with a badge.
 > * If `DESCRIPTION` or `PRIORITY` is not entered, help message for add will appear.
 
 Examples:
@@ -121,7 +125,7 @@ Examples:
 
 ### 2.3. Listing all events and tasks : `list`
 
-Shows the lists of all events and tasks in WhatsLeft.<br>
+Shows the lists of all events and tasks in the current mode in WhatsLeft.<br>
 Format: `list`
 
 ### 2.4. Editing an event/task : `edit`
@@ -172,12 +176,12 @@ Examples:
 ### 2.5. Finding all events and tasks containing any keyword in their description : `find`
 
 Finds events and tasks whose description contains any of the given keywords.<br>
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find KEYWORD [MORE_KEYWORDS]...`
 
 > * The search is case insensitive. e.g `discussion` will match `Discussion`
 > * The order of the keywords does not matter. e.g. `Project Discussion` will match `Discussion Project`
 > * Only the description is searched.
-> * Events/tasks matching at least one keyword will be returned (i.e. `OR` search).
+> * Events/tasks matching at least one keyword will be returned.
     e.g. `Project` will match `Project Discussion`
 
 Examples:
@@ -187,15 +191,14 @@ Examples:
 
 ### 2.6. Selecting an event or task : `select`
 
-Views the specified event or task form the event or task list.
+Views the specified event or task from the event or task list.
 
 Format: `select TYPE INDEX`
 
 > * Type should be `ev` or `ts`.
 > * Selects the event or task at the specified `INDEX`.
-> * The index refers to the index number shown in the most recent event or task listing.
+> * The index refers to the index number shown in the most recent event or task list.
 > * The index **must be a positive integer** 1, 2, 3, ...
-> * Event or task list and calendar will jump to the selected event or task.
 
 Examples:
 
@@ -210,14 +213,14 @@ Format: `delete TYPE INDEX`
 
 > * Type should be `ev` or `ts`.
 > * Deletes the event or task at the specified `INDEX`.
-> * The index refers to the index number shown in the most recent event/task listing.
+> * The index refers to the index number shown in the most recent event/task list.
 > * The index **must be a positive integer** 1, 2, 3, ...
 
 Examples:
 
 * `list`<br>
-  `delete ev 2`<br>
-  Deletes the 2nd event in the event list.
+  `delete ts 2`<br>
+  Deletes the 2nd task in the task list.
 * `find exam`<br>
   `delete ev 1`<br>
   Deletes the 1st event in the results of the `find` command.
@@ -234,13 +237,13 @@ Format: `clear [TYPE]`
 Examples:
 
 * `clear` <br>
-  Removes all events, deadlines and tasks in WhatsLeft.
+  Removes all events tasks in WhatsLeft.
 
 * `clear ev`<br>
   Removes all events in WhatsLeft.
 
 ### 2.9. Finishing/Redoing a task:
-#### 2.9.1. Finishing a task:
+#### 2.9.1. Finishing a task: `finish`
 
 Finishes the specified task in task list. Undoable.<br>
 Format: `finish TASK_INDEX`
@@ -294,7 +297,7 @@ Examples:
 Undoes the latest command.<br>
 Format: `undo`
 
-> * Undoes immediately after `add`, `edit`, `delete`, `clear` and `finish` commands.
+> * Undoes immediately after `add`, `edit`, `delete`, `clear`, `redo`, `recur` and `finish` commands.
 > * Cannot undo more than once consecutively.
 
 Examples:
@@ -308,30 +311,30 @@ Examples:
 Saves WhatsLeft data file to new location and updates the default storage location to new filepath.<br>
 Format: `save FILEPATH`
 
-> * Valid `FILEPATH` should be entered.
-> * WhatsLeft application will automatically load from the new storage location when started in the future.
+> * Valid `FILEPATH` should be entered, inclusive of filename with the xml filetype.
+> * WhatsLeft application will automatically load from the new storage location when started subsequently.
 
 Examples:
 
-* `save /User/Andy/Documents`
-  Saves the current WhatsLeft content to /User/Andy/Documents.
+* `save /User/Andy/Documents/WhatsLeft.xml`
+  Saves the current WhatsLeft content to /User/Andy/Documents/WhatsLeft.xml
 
 #### 2.12.2. Read WhatsLeft from new location
 Loads WhatsLeft data file from new location and updates the default storage location to new filepath.<br>
 Format: `read FILEPATH`
 
-> * Valid `FILEPATH` should be entered.
-> * WhatsLeft application will automatically load from the new storage location when started in the future.
+> * Valid `FILEPATH` should be entered, inclusive of filename with the xml filetype.
+> * WhatsLeft application will automatically load from the new storage location when started subsequently.
 > * If no WhatsLeft storage file is found in the designated filepath, a blank task book will be created and loaded.
 
 Examples:
 
-* `read /User/Andy/Documents`
-  Loads WhatsLeft from the WhatsLeft storage file stored in /User/Andy/Documents.
+* `read /User/Andy/Documents/WhatsLeft.xml`
+  Loads WhatsLeft from the WhatsLeft storage file stored in /User/Andy/Documents/WhatsLeft.xml
 
 ### 2.13. Changing Calendar Week: `next`
 Changes the weekly view on calendar according to specified weeks ahead.<br>
-Format: 'next [WEEKS_AHEAD]'
+Format: `next [WEEKS_AHEAD]`
 
 > * `WEEKS_AHEAD` is an optional field
 > * `WEEKS_AHEAD` must be an integer.
@@ -359,8 +362,7 @@ Format: `exit`
 ## 3. FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with
-       the file that contains the data of your previous WhatsLeft folder.
+**A**: Save the xml file to a synchronised folder. Install the app in the other computer and read the data from the same syncronised folder.
 
 ## 4. Command Summary
 
@@ -373,7 +375,7 @@ Add a task | `add DESCRIPTION p/PRIORITY [bt/BY_TIME] [bd/BY_DATE] [l/LOCATION] 
 List | `list` | `list`
 Edits an event | `edit ev INDEX [DESCRIPTION] [st/START_TIME] [sd/START_DATE] [et/END_TIME] [ed/END_DATE] [l/LOCATION] [ta/TAG]...` | `edit ev 3 Project Discussion et/2300`
 Edits a task | `edit ts INDEX [DESCRIPTION] [p/PRIORITY] [bt/BY_TIME] [bd\BYDATE] [l/LOCATION] [ta/TAG]...` | `edit ts 5 bd/next tue`
-Find | `find KEYWORD [MORE_KEYWORDS]` | `find discussion`
+Find | `find KEYWORD [MORE_KEYWORDS]...` | `find discussion`
 Select | `select TYPE INDEX` | `select ev 2`
 Delete | `delete TYPE INDEX` | `delete ts 3`
 Clear | `clear [TYPE]` | `clear ev`
@@ -381,8 +383,8 @@ Finish a task | `finish TASK_INDEX` | `finish 3`
 Redo a task | `redo TASK_INDEX` | `show com`<br>`redo 1`
 Change status preference | `show [DISPLAY_PREFERENCE]` | `show com`
 Undo last operation | `undo` | `undo`
-Change storage file location | `save FILEPATH` | `save Desktop/Data`
-Read data from location | `read FILEPATH` | `read Desktop/MyData`
+Change storage file location | `save FILEPATH` | `save ./Data/WhatsLeft.xml`
+Read data from location | `read FILEPATH` | `read ./MyData/WhatsLeft.xml`
 Changes week in calendar | `next [WEEKS_AHEAD]` | `next 2`
 Refresh calendar | `refresh` | `refresh`
 Exit WhatsLeft | `exit` | `exit`
