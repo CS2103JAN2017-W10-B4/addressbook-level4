@@ -51,7 +51,7 @@ Format: `help [COMMAND]`
 
 > * `COMMAND` is optional.
 > * `COMMAND` should be `add`, `recur`, `list`, `edit`, `find`, `select`, `delete`, `clear`, `finish`, `redo`, `show`, `undo`, `save`, `read`, `next`, `refresh` or `exit`.
-> * When no extra command is given, the help window will open. 
+> * When no extra command is given, the help window will open.
 > * When the command is specified, the format and examples of the command will be shown.
 
 ### 2.2. Adding an event or task : `add`
