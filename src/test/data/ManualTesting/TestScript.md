@@ -6,9 +6,10 @@
 2. Events are automatically sorted by dates, and will be removed automatically after it is over. <br>
 3. In the task panel, deadlines are automatically sorted by date and then by priority level. FLoating tasks are always below deadlines. <br>
 4. In the bottom of the window, the last updated time is reflected on the left, the current filepath (read and save) is displayed in the middle,
-   and the bottom right shows the mode that WhatsLeft is in. There are 3 modes. Currently, it is showing Pending activities. Hence, all activities
-   that are visible now are yet to be over or completed. The other modes are show (all) as well as show completed. It will be demonstrated later. <br>
-5. Size of our panels differs from device to device. It displays properly for our group’s devices, but if words are not showing properly, drag events/tasks panel right to increase visibility. <br>
+and the bottom right shows the mode that WhatsLeft is in. There are 3 modes. Currently, it is showing Pending activities. Hence, all activities
+that are visible now are yet to be over or completed. The other modes are show (all) as well as show completed. It will be demonstrated later. <br>
+5. Size of our panels differs from device to device. It displays properly for our group’s devices, but if words are not showing properly, drag events/tasks panel right to
+increase visibility. <br>
 
 ## Test Script
 
