@@ -22,7 +22,7 @@ public class RecurCommandParser {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, RecurCommand.MESSAGE_USAGE));
         }
 
-        Optional<String> freq = ParserUtil.parseFreqForRec(args);
+        Optional<String> freq = ParserUtil.parseFreqForRec(args.toLowerCase());
         if (!freq.isPresent()) {
             return new IncorrectCommand(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, RecurCommand.MESSAGE_USAGE));

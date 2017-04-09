@@ -34,7 +34,8 @@ public class ParserUtil {
             Pattern.CASE_INSENSITIVE);
     private static final Pattern INDEX_ALONE_ARG_FORMAT = Pattern.compile("(?<index>.+)");
     private static final Pattern CONFIG_FILEPATH_FORMAT = Pattern.compile("^(.)?(/\\p{Alnum}*)+.xml");
-    private static final Pattern INDEX_FREQ_OCCUR_FORMAT = Pattern.compile("(?<index>.+)\\s(?<freq>.+)\\s(?<occur>.+)");
+    private static final Pattern INDEX_FREQ_OCCUR_FORMAT = Pattern.compile("(?<index>.+)\\s(?<freq>.+)\\s(?<occur>.+)",
+            Pattern.CASE_INSENSITIVE);
 
     /**
      * Returns the specified index in the {@code command} if it is a positive unsigned integer
